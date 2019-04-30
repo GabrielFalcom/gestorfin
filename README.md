@@ -25,5 +25,21 @@ npm run test
 npm run lint
 ```
 
+### Vuetify
+```
+vue add vuetify
+```
+```
+npm install vuetify --save
+```
+
+### Material Desing Icons
+```
+https://vuetifyjs.com/pt-BR/framework/icons
+```
+```
+npm install material-design-icons-iconfont -D
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
