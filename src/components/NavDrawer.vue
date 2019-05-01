@@ -1,9 +1,9 @@
 <template>
   <v-navigation-drawer :clipped="clipp" stateless :value="drawer.value" app>
     <div class="container fluid pb-0">
-        <div class="text-xs-center">
-          <img alt="Vue logo" src="../assets/Vue.webp" width="90" height="90" class="center">
-        </div>
+      <div class="text-xs-center">
+        <img alt="Vue logo" src="../assets/Vue.webp" width="90" height="90" class="center">
+      </div>
     </div>
     <v-list>
       <v-list-group prepend-icon="list_alt" value="true" no-action>
@@ -12,12 +12,12 @@
             <v-list-tile-title>Cadastros</v-list-tile-title>
           </v-list-tile>
         </template>
-            <v-list-tile v-for="(cad, i) in cadastro" :key="i" @click>
-            <v-list-tile-title v-text="cad[0]"></v-list-tile-title>
-            <v-list-tile-action>
-              <v-icon v-text="cad[1]"></v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
+        <v-list-tile v-for="(cad, i) in cadastro" :key="i" @click="navigateTo(cad.hrefName)">
+          <v-list-tile-title v-text="cad.label"></v-list-tile-title>
+          <v-list-tile-action>
+            <v-icon v-text="cad.icon"></v-icon>
+          </v-list-tile-action>
+        </v-list-tile>
       </v-list-group>
 
       <!-- <v-list-group prepend-icon="account_circle" value="true">
@@ -54,7 +54,7 @@
             </v-list-tile-action>
           </v-list-tile>
         </v-list-group>
-      </v-list-group> -->
+      </v-list-group>-->
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -68,7 +68,24 @@ export default {
     drawer: {
       value: true
     },
-    cadastro: [["Clientes","people"], ["Fornecedores","poll"], ["Produtos","shopping_cart"]],
+    cadastro: [
+      {
+        label: "Clientes",
+        icon: "people",
+        hrefName: "home"
+      },
+      {
+        label: "Fornecedores",
+        icon: "poll",
+        hrefName: "fornecedor"
+      },
+      {
+        label: "Produtos",
+        icon: "shopping_cart",
+        hrefName: "home"
+      }
+    ],
+    // cadastro: [["Clientes","people"], ["Fornecedores","poll"], ["Produtos","shopping_cart"]],
     admins: [["Management", "people_outline"], ["Settings", "settings"]],
     cruds: [
       ["Create", "add"],
@@ -77,6 +94,11 @@ export default {
       ["Delete", "delete"]
     ]
   }),
+  methods: {
+    navigateTo(nomeRota) {
+      this.$router.push({ name: nomeRota});
+    }
+  },
   created() {
     eventBus.$on("showDrawer", drawer => {
       this.drawer.value = drawer;
