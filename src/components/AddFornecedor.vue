@@ -112,7 +112,7 @@
               Cadastrar
             </v-btn>
 
-          <v-btn color="warning" @click="reset">Resetar Formulario</v-btn>
+          <v-btn color="warning" @click="reset">Limpar Formulario</v-btn>
 
           <v-btn color="error" @click="cancelar">Cancelar</v-btn>
 
@@ -124,6 +124,8 @@
 </template>
 
 <script>
+import { eventBus } from '../main';
+
 export default {
   data: () => ({
     fornecedores: ["Pessoa Física", "Pessoa Jurídica"],
@@ -166,6 +168,8 @@ export default {
       var data = {};
       data.tipoFornecedor = this.empresa.select;
       this.empresa.select == "Pessoa Física" ? data.nome = this.pessoa.nomeCompleto : data.nome = this.empresa.nomeFantasia;
+      data.cpf = this.pessoa.cpf;
+      data.rg = this.pessoa.rg;
       data.cnpj = this.empresa.cnpj;
       data.razaoSoc = this.empresa.azaoSoc;
       data.email = this.contato.email;
@@ -206,11 +210,6 @@ export default {
           }
         );
     },
-    validate() {
-      if (this.$refs.form.validate()) {
-        this.snackbar = true;
-      }
-    },
     reset() {
       this.$refs.form.reset();
     },
@@ -235,6 +234,7 @@ export default {
     // voltar pra pagina anterior
     cancelar() {
       // this.$refs.form.resetValidation();
+        this.$router.push({ name: 'fornecedor'});
     }
   },
 };
