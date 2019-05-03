@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-container grid-list-xl>
-        <DialogFornecedor></DialogFornecedor>
+        <DialogFornecedor v-on:event_dialog="getFornecedores"></DialogFornecedor>
       <v-card>
         <v-card-title style="padding:0">
           <v-btn @click="navigateTo" color="success" style="text-transform: none;">
@@ -76,7 +76,7 @@ export default {
     openModal(row) {
       let rowOfDialog = row;
       this.dialog = true;
-      eventBus.$emit('dialogTrigged', {'dialog':this.dialog, 'row':rowOfDialog });
+      eventBus.$emit('dialogTrigged', {'dialog':this.dialog, 'row':rowOfDialog, 'deleteRow': false });
     },
     getFornecedores() {
       this.$http
@@ -98,6 +98,19 @@ export default {
     },
     deadSpot() {
         event.stopPropagation();
+    },
+    editItem(row){
+      console.log(row);
+      this.$router.push({ name: "editfornecedor", params: { content: row } });
+      // https://vuejs-http-6fd57.firebaseio.com/fornecedores.json?orderBy="id"&equalTo=9&print=pretty
+    // https://vuejs-http-6fd57.firebaseio.com/fornecedores.json?orderBy="id"&limitToLast=1&print=pretty
+    // https://vuejs-http-6fd57.firebaseio.com/fornecedores.json?orderBy="id"&limitToFirst=1&print=pretty
+    },
+    deleteItem(row) {
+      console.log(row);
+      let rowOfDialog = row;
+      this.dialog = true;
+      eventBus.$emit('dialogTrigged', {'dialog':this.dialog, 'row':rowOfDialog, 'deleteRow': true});
     }
   },
   components: {

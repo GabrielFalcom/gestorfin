@@ -105,16 +105,21 @@
             </div>
           </v-card>
           <br>
-          <v-btn color="success" 
-              @click="submit" 
+
+          <template v-if="update == false">
+            <v-btn color="success" @click="submit" :loading="loading" :disabled="loading">Cadastrar</v-btn>
+
+            <v-btn color="warning" @click="reset" :disabled="loading">Limpar Formulario</v-btn>
+          </template>
+          <template v-else>
+            <v-btn
+              color="success"
+              @click="updating"
               :loading="loading"
-              :disabled="loading">
-              Cadastrar
-            </v-btn>
-
-          <v-btn color="warning" @click="reset">Limpar Formulario</v-btn>
-
-          <v-btn color="error" @click="cancelar">Cancelar</v-btn>
+              :disabled="loading"
+            >Atualizar</v-btn>
+          </template>
+          <v-btn color="error" @click="cancelar" :disabled="loading">Cancelar</v-btn>
 
           <v-snackbar v-model="snackbar" :bottom="true" :timeout="1750">{{snackResponse}}</v-snackbar>
         </v-flex>
@@ -124,10 +129,11 @@
 </template>
 
 <script>
-import { eventBus } from '../main';
+import { eventBus } from "../main";
 
 export default {
   data: () => ({
+    update: false,
     fornecedores: ["Pessoa Física", "Pessoa Jurídica"],
     nameRules: [v => !!v || "Nome é obrigatorio"],
     emailRules: [v => /.+@.+/.test(v) || "E-mail precisa ser valido"],
@@ -135,10 +141,14 @@ export default {
     snackbar: false,
     snackResponse: "",
     valid: true,
+    //Firebase não cria um auto increment integer para atribuir ao payload. Vou injetar o valor em submit.
+    idFornecedor: "",
+    //Firebase tambem não permite PUT utilizando a referencia do objeto, apenas com sua chave de acesso.
+    chaveFirebase: "",
     pessoa: {
       nomeCompleto: "",
       cpf: "",
-      rg: "",
+      rg: ""
     },
     empresa: {
       select: null,
@@ -167,7 +177,9 @@ export default {
 
       var data = {};
       data.tipoFornecedor = this.empresa.select;
-      this.empresa.select == "Pessoa Física" ? data.nome = this.pessoa.nomeCompleto : data.nome = this.empresa.nomeFantasia;
+      this.empresa.select == "Pessoa Física"
+        ? (data.nome = this.pessoa.nomeCompleto)
+        : (data.nome = this.empresa.nomeFantasia);
       data.cpf = this.pessoa.cpf;
       data.rg = this.pessoa.rg;
       data.cnpj = this.empresa.cnpj;
@@ -179,36 +191,109 @@ export default {
       data.numero = this.endereco.numero;
       data.complemento = this.endereco.complemento;
       data.bairro = this.endereco.bairro;
-      if (!"localidade" in this.endereco || this.endereco.localidade == "") {
-        data.cidade = null;
-      } else {
-        data.cidade = this.endereco.localidade + "/" + this.endereco.uf;
-      }
       data.cep = this.endereco.cep;
+      this.endereco.localidade == ""
+        ? (data.cidade = null)
+        : (data.cidade = this.endereco.localidade + "/" + this.endereco.uf);
 
       this.$http
-        .post("https://vuejs-http-6fd57.firebaseio.com/fornecedores.json", data)
-        .then(
-          response => {
-            this.$refs.form.reset();
-            this.snackbar = true;
-            this.snackResponse = "Cadastro Realizado com Sucesso!";
-            console.log(response);
-            setTimeout(() => {
-              this.loading = false;
-              this.snackbar = false;
-            }, 1750);
-          },
-          error => {
-            this.snackbar = true;
-            this.snackResponse = "Não foi possivel efetuar o cadastro";
-            console.log(error);
-            setTimeout(() => {
-              this.snackbar = false;
-              // this.alertResponse = '';
-            }, 1750);
+        .get(
+          "https://vuejs-http-6fd57.firebaseio.com/fornecedores.json?orderBy=%22id%22&limitToLast=1&print=pretty"
+        )
+        .then(response => {
+          const resultArray = [];
+          for (let key in response.body) {
+            resultArray.push(response.body[key]);
           }
-        );
+          data.id = resultArray[0].id + 1;
+        })
+        .then(function() {
+          this.$http
+            .post(
+              "https://vuejs-http-6fd57.firebaseio.com/fornecedores.json",
+              data
+            )
+            .then(
+              response => {
+                this.$refs.form.reset();
+                this.snackbar = true;
+                this.snackResponse = "Cadastro Realizado com Sucesso!";
+                console.log(response);
+                setTimeout(() => {
+                  this.loading = false;
+                  this.snackbar = false;
+                }, 1750);
+              },
+              error => {
+                this.snackbar = true;
+                this.snackResponse = "Não foi possivel efetuar o cadastro";
+                console.log(error);
+                setTimeout(() => {
+                  this.loading = false;
+                  this.snackbar = false;
+                }, 1750);
+              }
+            );
+        });
+    },
+    updating() {
+      this.loading = true;
+
+      var data = {};
+      data.tipoFornecedor = this.empresa.select;
+      this.empresa.select == "Pessoa Física"
+        ? (data.nome = this.pessoa.nomeCompleto)
+        : (data.nome = this.empresa.nomeFantasia);
+      data.cpf = this.pessoa.cpf;
+      data.rg = this.pessoa.rg;
+      data.cnpj = this.empresa.cnpj;
+      data.razaoSoc = this.empresa.azaoSoc;
+      data.email = this.contato.email;
+      data.telefone = this.contato.telefone;
+      data.celular = this.contato.celular;
+      data.logradouro = this.endereco.logradouro;
+      data.numero = this.endereco.numero;
+      data.complemento = this.endereco.complemento;
+      data.bairro = this.endereco.bairro;
+      data.cep = this.endereco.cep;
+      data.id = this.idFornecedor;
+      data.cidade = this.endereco.localidade;
+
+      this.$http
+        .get(
+          "https://vuejs-http-6fd57.firebaseio.com/fornecedores.json?orderBy=%22id%22&equalTo="+this.idFornecedor
+        )
+        .then(response => {
+          this.chaveFirebase=(Object.keys(response.body)[0]);
+        })
+        .then(function() {
+          this.$http
+            .patch(
+              "https://vuejs-http-6fd57.firebaseio.com/fornecedores/"+this.chaveFirebase+'.json',
+              data
+            )
+            .then(
+              response => {
+                this.snackbar = true;
+                this.snackResponse = "Cadastro Atualizado com Sucesso!";
+                console.log(response);
+                setTimeout(() => {
+                  this.loading = false;
+                  this.snackbar = false;
+                  this.cancelar();
+                }, 1750);
+              },
+              error => {
+                this.snackbar = true;
+                this.snackResponse = "Não foi possivel atualizar o cadastro";
+                console.log(error);
+                setTimeout(() => {
+                  this.loading = false;
+                  this.snackbar = false;
+                }, 1750);
+              }
+            );
+        });
     },
     reset() {
       this.$refs.form.reset();
@@ -234,47 +319,87 @@ export default {
     // voltar pra pagina anterior
     cancelar() {
       // this.$refs.form.resetValidation();
-        this.$router.push({ name: 'fornecedor'});
+      this.$router.push({ name: "fornecedor" });
     }
   },
+  mounted() {
+    console.log(this.$route.params);
+    console.log(!("content" in this.$route.params));
+    if (!("content" in this.$route.params)) {
+      return;
+    }
+    const content = this.$route.params.content;
+    this.update = true;
+    if (content.tipoFornecedor == "Pessoa Jurídica") {
+      this.empresa = {
+        select: content.tipoFornecedor,
+        nomeFantasia: content.nome,
+        cnpj: content.cnpj,
+        razaoSoc: content.razaoSoc
+      };
+    } else {
+      (this.empresa = {
+        select: content.tipoFornecedor
+      }),
+        (this.pessoa = {
+          cpf: content.cpf,
+          nomeCompleto: content.nome,
+          rg: content.rg
+        });
+    }
+    (this.contato = {
+      email: content.email,
+      telefone: content.telefone,
+      celular: content.celular
+    }),
+      (this.endereco = {
+        cep: content.cep,
+        logradouro: content.logradouro,
+        numero: content.numero,
+        complemento: content.complemento,
+        bairro: content.bairro,
+        localidade: content.cidade
+      }),
+      (this.idFornecedor = content.id);
+  }
 };
 </script>
 
 <style>
-  .custom-loader {
-    animation: loader 1s infinite;
-    display: flex;
+.custom-loader {
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
   }
-  @-moz-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
   }
-  @-webkit-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
   }
-  @-o-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
   }
-  @keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
   }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 </style>
