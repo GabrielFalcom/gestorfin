@@ -8,7 +8,7 @@
               <v-form ref="form" v-model="valid">
                 <v-container>
                   <v-subheader>
-                    <v-icon>work</v-icon>Dados Empresariais
+                    <v-icon>work</v-icon> Dados Empresariais 
                   </v-subheader>
                   <v-layout>
                     <v-flex xs12 md3>
@@ -130,6 +130,7 @@
 
 <script>
 import { eventBus } from "../main";
+import { format } from 'path';
 
 export default {
   data: () => ({
@@ -169,12 +170,14 @@ export default {
       localidade: "",
       cep: "",
       uf: ""
-    }
+    },
+    dataCadastro: ""
   }),
   methods: {
     submit() {
+      this.formatDate();
+      
       this.loading = true;
-
       var data = {};
       data.tipoFornecedor = this.empresa.select;
       this.empresa.select == "Pessoa Física"
@@ -192,9 +195,11 @@ export default {
       data.complemento = this.endereco.complemento;
       data.bairro = this.endereco.bairro;
       data.cep = this.endereco.cep;
+      data.dataCadastro = this.dataCadastro;
       this.endereco.localidade == ""
         ? (data.cidade = null)
         : (data.cidade = this.endereco.localidade + "/" + this.endereco.uf);
+      
 
       this.$http
         .get(
@@ -316,7 +321,13 @@ export default {
           });
       }
     },
-    // voltar pra pagina anterior
+    formatDate(){
+      var todayTime = new Date();
+      var month = (todayTime .getMonth() + 1);
+      var day = (todayTime .getDate());
+      var year = (todayTime .getFullYear());
+      this.dataCadastro = day + "/" + month + "/" + year;
+    },
     cancelar() {
       // this.$refs.form.resetValidation();
       this.$router.push({ name: "fornecedor" });
