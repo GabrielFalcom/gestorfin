@@ -63,6 +63,10 @@
             <v-list-tile-content>Cep:</v-list-tile-content>
             <v-list-tile-content class="align-end">{{ content.cep }}</v-list-tile-content>
           </v-list-tile>
+          <v-list-tile>
+            <v-list-tile-content>Data Cadastro:</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ content.dataCadastro }}</v-list-tile-content>
+          </v-list-tile>
 
           <template v-if="erase == true">
             <br>
