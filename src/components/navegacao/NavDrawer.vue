@@ -2,7 +2,7 @@
   <v-navigation-drawer :clipped="clipp" stateless :value="drawer.value" app>
     <div class="container fluid pb-0">
       <div class="text-xs-center">
-        <img alt="Vue logo" src="../assets/Vue.webp" width="90" height="90" class="center">
+        <img alt="Vue logo" src="../../assets/Vue.webp" width="90" height="90" class="center">
       </div>
     </div>
     <v-list>
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { eventBus } from "../main.js";
+import { eventBus } from '../../main.js';
 
 export default {
   data: () => ({
@@ -72,7 +72,7 @@ export default {
       {
         label: "Clientes",
         icon: "people",
-        hrefName: "home"
+        hrefName: "cliente"
       },
       {
         label: "Fornecedores",

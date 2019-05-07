@@ -101,7 +101,7 @@
   </div>
 </template>
 <script>
-import { eventBus } from "../main";
+import { eventBus } from '../../main';
 export default {
   data() {
     return {
@@ -126,7 +126,8 @@ export default {
               response => {
                 console.log(response);
                 this.dialog = false;
-                this.$emit('event_dialog',1);
+                //Apenas emitindo um evento para Fornecedores executar um callback pra renderizar a lista.
+                this.$emit('event_dialog');
               },
               error => {
                 console.log(error);

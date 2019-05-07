@@ -3,13 +3,13 @@
     <v-container grid-list-xl>
         <DialogFornecedor v-on:event_dialog="getFornecedores"></DialogFornecedor>
       <v-card>
-        <v-card-title style="padding:0">
+         <div class="titleCard" style="background-color: #00C853; border-color: #00C853">
+            <h2>Fornecedores</h2>
+        </div>
+        <v-card-title>
           <v-btn @click="navigateTo" color="success" style="text-transform: none;">
             <v-icon style="padding-right: 5px">add_circle</v-icon>Adicionar Fornecedor
           </v-btn>
-        </v-card-title>
-        <v-card-title>
-          <h2>Fornecedores</h2>
           <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
@@ -28,7 +28,7 @@
         >
           <template v-slot:items="props">
             <tr @click.stop="openModal(props.item)" class="rowTable">
-              <td class="text-xs-right" @click="oi(props.item)">{{ props.item.nome }}</td>
+              <td class="text-xs-right" @click="openModal(props.item)">{{ props.item.nome }}</td>
               <td class="justify-center">{{ props.item.tipoFornecedor }}</td>
               <td class="justify-center">{{ props.item.telefone }}</td>
               <td class="justify-center">{{ props.item.celular }}</td>
@@ -48,7 +48,7 @@
 
 <script>
 import DialogFornecedor from "./DialogFornecedor.vue";
-import { eventBus } from '../main';
+import { eventBus } from '../../main';
 
 export default {
   data() {
@@ -123,11 +123,12 @@ export default {
 </script>
 
 <style>
-    .rowTable {
-        cursor: pointer;
-    }
+     /* .titleCard{
+      background-color: #00C853 !important;
+      border-color: #00C853 !important;
+    } */
 
-    .rowTable:hover { 
-        background-color: #ffe2e2 !important;
-    }
+     /* .rowTable:hover { 
+      background-color: #81C784;
+    }  */
 </style>

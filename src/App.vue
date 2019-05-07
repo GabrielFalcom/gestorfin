@@ -22,19 +22,14 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-import NavBar from './components/NavBar.vue'
-import NavDrawer from './components/NavDrawer.vue'
-import Fornecedores from './components/Fornecedores.vue'
-import AddFornecedor from './components/AddFornecedor.vue'
-
+import NavBar from './components/navegacao/NavBar.vue'
+import NavDrawer from './components/navegacao/NavDrawer.vue'
 export default {
   name: 'app',
   components: {
     HelloWorld,
     NavBar,
     NavDrawer,
-    AddFornecedor,
-    Fornecedores
   },
   data: () => ({
       breadcrumbsItems: [

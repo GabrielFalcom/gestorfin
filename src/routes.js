@@ -1,6 +1,8 @@
 import Home from './components/HelloWorld.vue'
-import Fornecedores from './components/Fornecedores.vue'
-import Fornecedor from './components/AddFornecedor.vue'
+import Fornecedores from './components/fornecedor/Fornecedores.vue'
+import Fornecedor from './components/fornecedor/AddFornecedor.vue'
+import Clientes from './components/cliente/Clientes.vue'
+import Cliente from './components/cliente/AddCliente.vue'
 
 export const routes = [ 
     {
@@ -31,6 +33,21 @@ export const routes = [
         path: '/fornecedores/editar', 
         name: 'editfornecedor',
         component: Fornecedor,
+    },
+    {
+        path: '/clientes',
+        name: 'cliente',
+        component: Clientes,
+    },
+    {
+        path: '/clientes/adicionar',
+        name: 'addcliente',
+        component: Cliente,
+    },
+    {
+        path: '/clientes/editar', 
+        name: 'editcliente',
+        component: Cliente,
     },
     {
         path: '*', redirect: { name: 'home'}

@@ -8,45 +8,19 @@
               <v-form ref="form" v-model="valid">
                 <v-container>
                   <v-subheader>
-                    <v-icon>work</v-icon> Dados Empresariais 
+                     <v-icon style="padding-right: 5px">work</v-icon> Dados Pessoais 
                   </v-subheader>
                   <v-layout>
-                    <v-flex xs12 md3>
-                      <v-select
-                        v-model="empresa.select"
-                        :items="fornecedores"
-                        :rules="[v => !!v || 'Fornecedor é obrigatorio']"
-                        label="Fornecedor"
-                        required
-                      ></v-select>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout v-if="this.empresa.select == 'Pessoa Jurídica'">
-                    <v-flex xs12 md3>
-                      <v-text-field
-                        v-model="empresa.nomeFantasia"
-                        :rules="nameRules"
-                        label="Nome Fantasia"
-                        required
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 md3>
-                      <v-text-field v-model="empresa.cnpj" mask="##.###.###/####-##" label="CNPJ"></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 md6>
-                      <v-text-field v-model="empresa.razaoSoc" label="Razão Social"></v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout v-if="this.empresa.select == 'Pessoa Física'">
-                    <v-flex xs12 md6>
+                    <v-flex xs12 md4>
                       <v-text-field
                         v-model="pessoa.nomeCompleto"
                         :rules="nameRules"
                         label="Nome Completo"
                         required
                       ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 md2>
+                      <v-text-field v-model="pessoa.nascimento" mask="##/##/####" label="Nascimento"></v-text-field>
                     </v-flex>
                     <v-flex xs12 md3>
                       <v-text-field v-model="pessoa.cpf" mask="###.###.###-##" label="CPF"></v-text-field>
@@ -57,7 +31,7 @@
                   </v-layout>
 
                   <v-subheader>
-                    <v-icon>contact_mail</v-icon>Dados de Contato
+                     <v-icon style="padding-right: 5px">contact_mail</v-icon>Dados de Contato
                   </v-subheader>
                   <v-layout>
                     <v-flex xs12 md4>
@@ -71,7 +45,7 @@
                     </v-flex>
                   </v-layout>
                   <v-subheader>
-                    <v-icon>pin_drop</v-icon>Dados de Endereço
+                     <v-icon style="padding-right: 5px">pin_drop</v-icon>Dados de Endereço
                   </v-subheader>
                   <v-layout>
                     <v-flex xs12 md4>
@@ -129,13 +103,11 @@
 </template>
 
 <script>
-import { eventBus } from "../main";
-import { format } from 'path';
+import { eventBus } from '../../main';
 
 export default {
   data: () => ({
     update: false,
-    fornecedores: ["Pessoa Física", "Pessoa Jurídica"],
     nameRules: [v => !!v || "Nome é obrigatorio"],
     emailRules: [v => /.+@.+/.test(v) || "E-mail precisa ser valido"],
     loading: false,
@@ -143,19 +115,14 @@ export default {
     snackResponse: "",
     valid: true,
     //Firebase não cria um auto increment integer para atribuir ao payload. Vou injetar o valor em submit.
-    idFornecedor: "",
+    idCliente: "",
     //Firebase tambem não permite PUT utilizando a referencia do objeto, apenas com sua chave de acesso.
     chaveFirebase: "",
     pessoa: {
       nomeCompleto: "",
       cpf: "",
-      rg: ""
-    },
-    empresa: {
-      select: null,
-      nomeFantasia: "",
-      cnpj: "",
-      razaoSoc: ""
+      rg: "",
+      nascimento: "",
     },
     contato: {
       email: "",
@@ -179,14 +146,11 @@ export default {
       
       this.loading = true;
       var data = {};
-      data.tipoFornecedor = this.empresa.select;
-      this.empresa.select == "Pessoa Física"
-        ? (data.nome = this.pessoa.nomeCompleto)
-        : (data.nome = this.empresa.nomeFantasia);
+      
+      data.nome = this.pessoa.nomeCompleto;
       data.cpf = this.pessoa.cpf;
       data.rg = this.pessoa.rg;
-      data.cnpj = this.empresa.cnpj;
-      data.razaoSoc = this.empresa.azaoSoc;
+      data.nascimento = this.pessoa.nascimento;
       data.email = this.contato.email;
       data.telefone = this.contato.telefone;
       data.celular = this.contato.celular;
@@ -198,24 +162,28 @@ export default {
       data.dataCadastro = this.dataCadastro;
       this.endereco.localidade == ""
         ? (data.cidade = null)
-        : (data.cidade = this.endereco.localidade + "/" + this.endereco.uf);
+        : (data.cidade = this.endereco.localidade);
       
 
       this.$http
         .get(
-          "https://vuejs-http-6fd57.firebaseio.com/fornecedores.json?orderBy=%22id%22&limitToLast=1&print=pretty"
+          "https://vuejs-http-6fd57.firebaseio.com/clientes.json?orderBy=%22id%22&limitToLast=1&print=pretty"
         )
         .then(response => {
-          const resultArray = [];
-          for (let key in response.body) {
-            resultArray.push(response.body[key]);
+          if (response.body != null){  
+            const resultArray = [];
+            for (let key in response.body) {
+              resultArray.push(response.body[key]);
+            }
+            data.id = resultArray[0].id + 1;
+          } else {
+            data.id = 1;
           }
-          data.id = resultArray[0].id + 1;
         })
         .then(function() {
           this.$http
             .post(
-              "https://vuejs-http-6fd57.firebaseio.com/fornecedores.json",
+              "https://vuejs-http-6fd57.firebaseio.com/clientes.json",
               data
             )
             .then(
@@ -245,14 +213,10 @@ export default {
       this.loading = true;
 
       var data = {};
-      data.tipoFornecedor = this.empresa.select;
-      this.empresa.select == "Pessoa Física"
-        ? (data.nome = this.pessoa.nomeCompleto)
-        : (data.nome = this.empresa.nomeFantasia);
+
+      data.nome = this.pessoa.nomeCompleto;
       data.cpf = this.pessoa.cpf;
       data.rg = this.pessoa.rg;
-      data.cnpj = this.empresa.cnpj;
-      data.razaoSoc = this.empresa.azaoSoc;
       data.email = this.contato.email;
       data.telefone = this.contato.telefone;
       data.celular = this.contato.celular;
@@ -261,12 +225,13 @@ export default {
       data.complemento = this.endereco.complemento;
       data.bairro = this.endereco.bairro;
       data.cep = this.endereco.cep;
-      data.id = this.idFornecedor;
+      data.id = this.idCliente;
       data.cidade = this.endereco.localidade;
+      data.nascimento = this.pessoa.nascimento
 
       this.$http
         .get(
-          "https://vuejs-http-6fd57.firebaseio.com/fornecedores.json?orderBy=%22id%22&equalTo="+this.idFornecedor
+          "https://vuejs-http-6fd57.firebaseio.com/clientes.json?orderBy=%22id%22&equalTo="+this.idCliente
         )
         .then(response => {
           this.chaveFirebase=(Object.keys(response.body)[0]);
@@ -274,7 +239,7 @@ export default {
         .then(function() {
           this.$http
             .patch(
-              "https://vuejs-http-6fd57.firebaseio.com/fornecedores/"+this.chaveFirebase+'.json',
+              "https://vuejs-http-6fd57.firebaseio.com/clientes/"+this.chaveFirebase+'.json',
               data
             )
             .then(
@@ -330,7 +295,7 @@ export default {
     },
     cancelar() {
       // this.$refs.form.resetValidation();
-      this.$router.push({ name: "fornecedor" });
+      this.$router.push({ name: "cliente" });
     }
   },
   mounted() {
@@ -341,37 +306,26 @@ export default {
     }
     const content = this.$route.params.content;
     this.update = true;
-    if (content.tipoFornecedor == "Pessoa Jurídica") {
-      this.empresa = {
-        select: content.tipoFornecedor,
-        nomeFantasia: content.nome,
-        cnpj: content.cnpj,
-        razaoSoc: content.razaoSoc
-      };
-    } else {
-      (this.empresa = {
-        select: content.tipoFornecedor
-      }),
-        (this.pessoa = {
+    this.pessoa = {
+          nascimento: content.nascimento,
           cpf: content.cpf,
           nomeCompleto: content.nome,
           rg: content.rg
-        });
-    }
-    (this.contato = {
+    },
+    this.contato = {
       email: content.email,
       telefone: content.telefone,
       celular: content.celular
-    }),
-      (this.endereco = {
+    },
+    this.endereco = {
         cep: content.cep,
         logradouro: content.logradouro,
         numero: content.numero,
         complemento: content.complemento,
         bairro: content.bairro,
         localidade: content.cidade
-      }),
-      (this.idFornecedor = content.id);
+    },
+    this.idCliente = content.id;
   }
 };
 </script>
