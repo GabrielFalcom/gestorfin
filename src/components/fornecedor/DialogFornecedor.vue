@@ -81,7 +81,7 @@
           <v-card-actions :class="selectedClass">
             <v-spacer></v-spacer>
             <v-btn flat @click="dialog = false">
-              <strong>OK</strong>
+              <strong style="color: white">OK</strong>
             </v-btn>
           </v-card-actions>
         </template>
@@ -107,7 +107,7 @@ export default {
     return {
       content: {},
       dialog: false,
-      selectedClass: "info",
+      selectedClass: "cardTitleFncd",
       erase: "",
       chaveFirebase:""
     };
@@ -149,3 +149,8 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+/* background-color: #00C853; */
+
+</style>

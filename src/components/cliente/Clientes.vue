@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-container grid-list-xl>
-        <!-- <DialogFornecedor v-on:event_dialog="getFornecedores"></DialogFornecedor> -->
+        <DialogCliente v-on:event_dialog="getClientes"></DialogCliente>
       <v-card>
         <div class="titleCard" style="background-color: #448AFF; border-color: #448AFF;">
             <h2>Clientes</h2>
@@ -49,6 +49,7 @@
 <script>
 
 import { eventBus } from '../../main';
+import DialogCliente from './DialogCliente.vue';
 
 export default {
   data() {
@@ -111,7 +112,7 @@ export default {
     }
   },
   components: {
-    // DialogFornecedor
+    DialogCliente
   },
   created() {
     this.getClientes();
