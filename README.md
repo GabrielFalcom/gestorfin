@@ -27,9 +27,6 @@ npm run lint
 
 ### Vuetify
 ```
-vue add vuetify
-```
-```
 npm install vuetify --save
 ```
 
