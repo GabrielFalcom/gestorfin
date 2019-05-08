@@ -1,6 +1,6 @@
 <template>
   <div class="text-xs-center">
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="dialog" width="550">
       <v-card>
         <v-card-title :class="selectedClass">
           <h4>{{ content.nome }}</h4>
@@ -23,14 +23,14 @@
                 <v-list-tile-action>
                     <v-icon color="indigo">person</v-icon>
                 </v-list-tile-action>
+
                 <v-list-tile-content>
                     <v-list-tile-title>{{ content.cpf }}</v-list-tile-title>
                     <v-list-tile-sub-title>CPF</v-list-tile-sub-title>
                 </v-list-tile-content>
-            </v-list-tile>
 
-            <v-list-tile>
                 <v-list-tile-action></v-list-tile-action>
+
                 <v-list-tile-content>
                 <v-list-tile-title>{{ content.rg }}</v-list-tile-title>
                 <v-list-tile-sub-title>RG</v-list-tile-sub-title>
@@ -51,14 +51,14 @@
 
             <v-list-tile>
                 <v-list-tile-action></v-list-tile-action>
+
                 <v-list-tile-content>
                 <v-list-tile-title>{{ content.telefone }}</v-list-tile-title>
                 <v-list-tile-sub-title>Telefone</v-list-tile-sub-title>
                 </v-list-tile-content>
-            </v-list-tile>
 
-            <v-list-tile>
                 <v-list-tile-action></v-list-tile-action>
+
                 <v-list-tile-content>
                 <v-list-tile-title>{{ content.celular }}</v-list-tile-title>
                 <v-list-tile-sub-title>Celular</v-list-tile-sub-title>
@@ -75,10 +75,9 @@
                     <v-list-tile-title>{{ content.logradouro }}</v-list-tile-title>
                     <v-list-tile-sub-title>Logradouro</v-list-tile-sub-title>
                 </v-list-tile-content>
-            </v-list-tile>
 
-            <v-list-tile>
                 <v-list-tile-action></v-list-tile-action>
+
                 <v-list-tile-content>
                 <v-list-tile-title>{{ content.numero }}</v-list-tile-title>
                 <v-list-tile-sub-title>Numero</v-list-tile-sub-title>
@@ -87,14 +86,14 @@
 
             <v-list-tile>
                 <v-list-tile-action></v-list-tile-action>
+
                 <v-list-tile-content>
                 <v-list-tile-title>{{ content.bairro }}</v-list-tile-title>
                 <v-list-tile-sub-title>Bairro</v-list-tile-sub-title>
                 </v-list-tile-content>
-            </v-list-tile>
 
-            <v-list-tile>
                 <v-list-tile-action></v-list-tile-action>
+
                 <v-list-tile-content>
                 <v-list-tile-title>{{ content.complemento }}</v-list-tile-title>
                 <v-list-tile-sub-title>Complemento</v-list-tile-sub-title>
@@ -103,14 +102,14 @@
 
             <v-list-tile>
                 <v-list-tile-action></v-list-tile-action>
+
                 <v-list-tile-content>
                 <v-list-tile-title>{{ content.cidade }}</v-list-tile-title>
                 <v-list-tile-sub-title>Cidade</v-list-tile-sub-title>
                 </v-list-tile-content>
-            </v-list-tile>
 
-            <v-list-tile>
                 <v-list-tile-action></v-list-tile-action>
+
                 <v-list-tile-content>
                 <v-list-tile-title>{{ content.cep }}</v-list-tile-title>
                 <v-list-tile-sub-title>Cep</v-list-tile-sub-title>
@@ -164,7 +163,7 @@ export default {
     return {
       content: {},
       dialog: false,
-      selectedClass: "cardTitleFncd",
+      selectedClass: "cardTitleClt",
       erase: "",
       chaveFirebase:""
     };

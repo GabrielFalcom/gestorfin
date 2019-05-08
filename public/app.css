@@ -3,6 +3,11 @@
   color: white;
 }
 
+.cardTitleClt {
+  background-color: #448AFF;
+  color: white;
+}
+
 .rowTable {
     cursor: pointer;
 }
