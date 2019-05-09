@@ -87,12 +87,12 @@
         </template>
         <template v-else>
           <v-card-actions :class="selectedClass">
-            <v-btn flat @click="dialog = false">
-              <strong>Cancelar</strong>
+            <v-btn flat @click="dialog = false" :disabled="loading">
+              <strong style="color:white">Cancelar</strong>
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn flat @click="removeFornecedor">
-              <strong>Deletar</strong>
+            <v-btn flat @click="removeFornecedor" :loading="loading" :disabled="loading">
+              <strong style="color:white">Deletar</strong>
             </v-btn>
           </v-card-actions>
         </template>
@@ -143,7 +143,7 @@ export default {
       this.content = rowOfDialog.row;
       this.erase = rowOfDialog.deleteRow;
       if (this.erase == true){
-        this.selectedClass = "warning";
+        this.selectedClass = "cardTitleDelete";
       }
     });
   }

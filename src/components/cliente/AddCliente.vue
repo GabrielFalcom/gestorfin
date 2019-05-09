@@ -20,10 +20,10 @@
                       ></v-text-field>
                     </v-flex>
                     <v-flex xs12 md2>
-                      <v-text-field v-model="pessoa.nascimento" mask="##/##/####" label="Nascimento"></v-text-field>
+                      <v-text-field v-model="pessoa.nascimento" mask="##/##/####" return-masked-value label="Nascimento"></v-text-field>
                     </v-flex>
                     <v-flex xs12 md3>
-                      <v-text-field v-model="pessoa.cpf" mask="###.###.###-##" label="CPF"></v-text-field>
+                      <v-text-field v-model="pessoa.cpf" mask="###.###.###-##" return-masked-value label="CPF"></v-text-field>
                     </v-flex>
                     <v-flex xs12 md3>
                       <v-text-field v-model="pessoa.rg" label="RG"></v-text-field>
@@ -38,10 +38,10 @@
                       <v-text-field v-model="contato.email" :rules="emailRules" label="E-mail"></v-text-field>
                     </v-flex>
                     <v-flex xs12 md4>
-                      <v-text-field v-model="contato.telefone" label="Telefone"></v-text-field>
+                      <v-text-field v-model="contato.telefone" mask="(##) ####-####" return-masked-value label="Telefone"></v-text-field>
                     </v-flex>
                     <v-flex xs12 md4>
-                      <v-text-field v-model="contato.celular" mask="(##)#####-####" label="Celular"></v-text-field>
+                      <v-text-field v-model="contato.celular" mask="(##) #####-####" return-masked-value label="Celular"></v-text-field>
                     </v-flex>
                   </v-layout>
                   <v-subheader>
