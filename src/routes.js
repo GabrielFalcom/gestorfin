@@ -3,6 +3,8 @@ import Fornecedores from './components/fornecedor/Fornecedores.vue'
 import Fornecedor from './components/fornecedor/AddFornecedor.vue'
 import Clientes from './components/cliente/Clientes.vue'
 import Cliente from './components/cliente/AddCliente.vue'
+import Produtos from './components/produto/Produtos.vue'
+import Produto from './components/produto/AddProduto.vue'
 
 export const routes = [ 
     {
@@ -48,6 +50,16 @@ export const routes = [
         path: '/clientes/editar', 
         name: 'editcliente',
         component: Cliente,
+    },
+    {
+        path: '/produtos',
+        name: 'produto',
+        component: Produtos,
+    },
+    {
+        path: '/produtos/adicionar',
+        name: 'addproduto',
+        component: Produto,
     },
     {
         path: '*', redirect: { name: 'home'}

@@ -30,6 +30,11 @@ npm run lint
 npm install vuetify --save
 ```
 
+### Vuetify
+```
+npm install v-money --save
+```
+
 ### Material Desing Icons
 ```
 https://vuetifyjs.com/pt-BR/framework/icons

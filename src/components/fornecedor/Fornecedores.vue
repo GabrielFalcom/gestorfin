@@ -28,7 +28,7 @@
         >
           <template v-slot:items="props">
             <tr @click.stop="openModal(props.item)" class="rowTable">
-              <td class="text-xs-right" @click="openModal(props.item)">{{ props.item.nome }}</td>
+              <td class="text-xs-right"> {{ props.item.nome }}</td>
               <td class="justify-center">{{ props.item.tipoFornecedor }}</td>
               <td class="justify-center">{{ props.item.telefone }}</td>
               <td class="justify-center">{{ props.item.celular }}</td>

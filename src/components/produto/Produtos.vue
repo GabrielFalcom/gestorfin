@@ -1,14 +1,14 @@
 <template>
   <v-layout>
     <v-container grid-list-xl>
-        <DialogCliente v-on:event_dialog="getClientes"></DialogCliente>
+        <DialogProduto v-on:event_dialog="getProdutos"></DialogProduto>
       <v-card>
-        <div class="titleCard" style="background-color: #448AFF; border-color: #448AFF;">
-            <h2>Clientes</h2>
+        <div class="titleCard" style="background-color: #FFA000; border-color: #FFA000;">
+            <h2>Produtos</h2>
         </div>
         <v-card-title>
-          <v-btn @click="navigateTo" color="#64B5F6"  style="text-transform: none; color:#ffffff">
-            <v-icon style="padding-right: 5px">add_circle</v-icon>Adicionar Cliente
+          <v-btn @click="navigateTo" color="#FFC107"  style="text-transform: none; color:#ffffff">
+            <v-icon style="padding-right: 5px">add_circle</v-icon>Adicionar Produto
           </v-btn>
           <v-spacer></v-spacer>
           <v-text-field
@@ -21,18 +21,25 @@
         </v-card-title>
         <v-data-table
           :headers="headers"
-          :items="clientes"
+          :items="produtos"
           :search="search"
           class="elevation-1"
           hide-actions
         >
           <template v-slot:items="props">
             <tr @click.stop="openModal(props.item)" class="rowTable">
-              <td class="text-xs-center"> {{ props.item.imagem }}</td>
+              <td class="text-xs-center"> 
+                   <v-avatar size="100px">
+                       <img 
+                       src="${props.item.imagem.url}"
+                       alt="Avatar">
+                       
+                   </v-avatar>
+                </td>
               <td class="text-xs-right"> {{ props.item.nome }}</td>
-              <td class="justify-center">{{ props.item.telefone }}</td>
-              <td class="justify-center">{{ props.item.celular }}</td>
-              <td class="justify-center">{{ props.item.email }}</td>
+              <td class="text-xs-right"> {{ props.item.quantidade }}</td>
+              <td class="justify-center">{{ props.item.preco }}</td>
+              <td class="justify-center">{{ props.item.fornecedor }}</td>
               <td class="justify-center">{{ props.item.dataCadastro }}</td>
               <td class="justify-center" @click="deadSpot">
                 <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
@@ -49,7 +56,7 @@
 <script>
 
 import { eventBus } from '../../main';
-import DialogCliente from './DialogCliente.vue';
+import DialogProduto from './DialogProduto.vue';
 
 export default {
   data() {
@@ -64,13 +71,13 @@ export default {
           value: "nome",
           align: "center"
         },
-        { text: "Telefone", value: "telefone" },
-        { text: "Celular", value: "celular" },
-        { text: "Email", value: "email" },
+        { text: "Quantidade", value: "quantidade" },
+        { text: "Preco", value: "preco" },
+        { text: "Fornecedor", value: "fornecedor" },
         { text: "Data Cadastro", value: "dataCadastro" },
         { text: "Ações", value: "" }
       ],
-      clientes: []
+      produtos: []
     };
   },
   methods: {
@@ -79,9 +86,9 @@ export default {
       this.dialog = true;
       eventBus.$emit('dialogTrigged', {'dialog':this.dialog, 'row':rowOfDialog, 'deleteRow': false });
     },
-    getClientes() {
+    getProdutos() {
       this.$http
-        .get("https://vuejs-http-6fd57.firebaseio.com/clientes.json")
+        .get("https://vuejs-http-6fd57.firebaseio.com/produtos.json")
         .then(response => {
           return response.json();
         })
@@ -90,19 +97,19 @@ export default {
           for (let key in data) {
             resultArray.push(data[key]);
           }
-          this.clientes = resultArray;
-          console.log(this.clientes);
+          this.produtos = resultArray;
+          console.log(this.produtos);
         });
     },
     navigateTo() {
-      this.$router.push({ name: "addcliente" });
+      this.$router.push({ name: "addproduto" });
     },
     deadSpot() {
         event.stopPropagation();
     },
     editItem(row){
       console.log(row);
-      this.$router.push({ name: "editcliente", params: { content: row } });
+      this.$router.push({ name: "editproduto", params: { content: row } });
     },
     deleteItem(row) {
       console.log(row);
@@ -112,10 +119,10 @@ export default {
     }
   },
   components: {
-    DialogCliente
+    DialogProduto
   },
   created() {
-    this.getClientes();
+    this.getProdutos();
   }
 };
 </script>

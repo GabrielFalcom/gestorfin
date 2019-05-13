@@ -82,10 +82,9 @@ export default {
       {
         label: "Produtos",
         icon: "shopping_cart",
-        hrefName: "home"
+        hrefName: "produto"
       }
     ],
-    // cadastro: [["Clientes","people"], ["Fornecedores","poll"], ["Produtos","shopping_cart"]],
     admins: [["Management", "people_outline"], ["Settings", "settings"]],
     cruds: [
       ["Create", "add"],

@@ -4,11 +4,15 @@
       <v-card>
         <v-card-title :class="selectedClass+' justify-center'">
 
+            <v-toolbar-title>{{ content.nome }}</v-toolbar-title>
+
               <v-btn flat icon  @click="dialogTab = 'photo'">
                 <v-icon :color="dialogTab == 'photo' ? 'white' : 'yellow accent-3' ">portrait</v-icon>
               </v-btn>
 
-            <v-toolbar-title>{{ content.nome }}</v-toolbar-title>
+              <v-btn flat icon  @click="dialogTab = 'descricao'">
+                <v-icon :color="dialogTab == 'descricao' ? 'white' : 'yellow accent-3' ">menu</v-icon>
+              </v-btn>
 
             <v-btn flat icon @click="dialogTab = 'dados'">
                 <v-icon :color="dialogTab == 'dados' ? 'white' : 'yellow accent-3' ">list</v-icon>
@@ -17,25 +21,39 @@
           
         </v-card-title>
         <template v-if="dialogTab == 'photo'">
-          <v-img src="https://cdn.vuetifyjs.com/images/lists/ali.png" height="300px"></v-img>
+          <v-img :src="$url(content.imagem)"></v-img>
         </template>
-        <template v-else>
+        <template v-if="dialogTab == 'dados'">
           <v-list two-line>
             <v-list-tile>
               <v-list-tile-action>
-                <v-icon color="indigo">person</v-icon>
+                <v-icon color="indigo">fitness_center</v-icon>
               </v-list-tile-action>
 
               <v-list-tile-content>
-                <v-list-tile-title>{{ content.cpf }}</v-list-tile-title>
-                <v-list-tile-sub-title>CPF</v-list-tile-sub-title>
+                <v-list-tile-title>{{ content.altura }}</v-list-tile-title>
+                <v-list-tile-sub-title>Altura(M)</v-list-tile-sub-title>
               </v-list-tile-content>
 
               <v-list-tile-action></v-list-tile-action>
 
               <v-list-tile-content>
-                <v-list-tile-title>{{ content.rg }}</v-list-tile-title>
-                <v-list-tile-sub-title>RG</v-list-tile-sub-title>
+                <v-list-tile-title>{{ content.comprimento }}</v-list-tile-title>
+                <v-list-tile-sub-title>Comprimento(M)</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            
+            <v-list-tile>
+              <v-list-tile-action></v-list-tile-action>
+
+              <v-list-tile-content>
+                <v-list-tile-title>{{ content.largura }}</v-list-tile-title>
+                <v-list-tile-sub-title>Largura(M)</v-list-tile-sub-title>
+              </v-list-tile-content>
+
+              <v-list-tile-content>
+                <v-list-tile-title>{{ content.peso }}</v-list-tile-title>
+                <v-list-tile-sub-title>Peso(Kg)</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
 
@@ -43,91 +61,36 @@
 
             <v-list-tile>
               <v-list-tile-action>
-                <v-icon color="indigo">mail</v-icon>
+                <v-icon color="indigo">list</v-icon>
               </v-list-tile-action>
+
               <v-list-tile-content>
-                <v-list-tile-title>{{ content.email }}</v-list-tile-title>
-                <v-list-tile-sub-title>Email</v-list-tile-sub-title>
+                <v-list-tile-title>{{ content.fornecedor }}</v-list-tile-title>
+                <v-list-tile-sub-title>Fornecedor</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
-
+            
             <v-list-tile>
               <v-list-tile-action></v-list-tile-action>
-
               <v-list-tile-content>
-                <v-list-tile-title>{{ content.telefone }}</v-list-tile-title>
-                <v-list-tile-sub-title>Telefone</v-list-tile-sub-title>
+                <v-list-tile-title>{{ content.quantidade }}</v-list-tile-title>
+                <v-list-tile-sub-title>Quantidade</v-list-tile-sub-title>
               </v-list-tile-content>
 
               <v-list-tile-action></v-list-tile-action>
 
               <v-list-tile-content>
-                <v-list-tile-title>{{ content.celular }}</v-list-tile-title>
-                <v-list-tile-sub-title>Celular</v-list-tile-sub-title>
+                <v-list-tile-title>R${{ content.preco }}</v-list-tile-title>
+                <v-list-tile-sub-title>Preço</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
 
             <v-divider inset></v-divider>
-
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-icon color="indigo">pin_drop</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ content.logradouro }}</v-list-tile-title>
-                <v-list-tile-sub-title>Logradouro</v-list-tile-sub-title>
-              </v-list-tile-content>
-
-              <v-list-tile-action></v-list-tile-action>
-
-              <v-list-tile-content>
-                <v-list-tile-title>{{ content.numero }}</v-list-tile-title>
-                <v-list-tile-sub-title>Numero</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-
-            <v-list-tile>
-              <v-list-tile-action></v-list-tile-action>
-
-              <v-list-tile-content>
-                <v-list-tile-title>{{ content.bairro }}</v-list-tile-title>
-                <v-list-tile-sub-title>Bairro</v-list-tile-sub-title>
-              </v-list-tile-content>
-
-              <v-list-tile-action></v-list-tile-action>
-              <v-list-tile-action></v-list-tile-action>
-
-              <v-list-tile-content>
-                <v-list-tile-title>{{ content.complemento }}</v-list-tile-title>
-                <v-list-tile-sub-title>Complemento</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-
-            <v-list-tile>
-              <v-list-tile-action></v-list-tile-action>
-
-              <v-list-tile-content>
-                <v-list-tile-title>{{ content.cidade }}</v-list-tile-title>
-                <v-list-tile-sub-title>Cidade</v-list-tile-sub-title>
-              </v-list-tile-content>
-
-              <v-list-tile-action></v-list-tile-action>
-
-              <v-list-tile-content>
-                <v-list-tile-title>{{ content.cep }}</v-list-tile-title>
-                <v-list-tile-sub-title>Cep</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-
-            <v-list-tile>
-              <v-list-tile-action></v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ content.dataCadastro }}</v-list-tile-title>
-                <v-list-tile-sub-title>Data Cadastro</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
           </v-list>
         </template>
+        <template v-if="dialogTab == 'descricao'">
+                <v-card-text>{{ content.descricao }}</v-card-text>
+            </template>
 
           <template v-if="erase == true">
             <v-divider></v-divider>
