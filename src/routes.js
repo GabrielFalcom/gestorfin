@@ -5,6 +5,8 @@ import Clientes from './components/cliente/Clientes.vue'
 import Cliente from './components/cliente/AddCliente.vue'
 import Produtos from './components/produto/Produtos.vue'
 import Produto from './components/produto/AddProduto.vue'
+import ContasPagar from './components/contasPagar/ContasPagar.vue'
+import Pagamento from './components/contasPagar/Pagamento.vue'
 
 export const routes = [ 
     {
@@ -60,6 +62,21 @@ export const routes = [
         path: '/produtos/adicionar',
         name: 'addproduto',
         component: Produto,
+    },
+    {
+        path: '/produtos/editar', 
+        name: 'editproduto',
+        component: Produto,
+    },
+    {
+        path: '/contasapagar',
+        name: 'contaspay',
+        component: ContasPagar,
+    },
+    {
+        path: '/contasapagar/adicionar',
+        name: 'addpagamento',
+        component: Pagamento,
     },
     {
         path: '*', redirect: { name: 'home'}

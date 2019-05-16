@@ -29,11 +29,8 @@
           <template v-slot:items="props">
             <tr @click.stop="openModal(props.item)" class="rowTable">
               <td class="text-xs-center"> 
-                   <v-avatar size="100px">
-                       <img 
-                       src="${props.item.imagem.url}"
-                       alt="Avatar">
-                       
+                   <v-avatar size="100px" :tile="true">
+                       <v-img :src="$url(props.item.imagem)"></v-img>
                    </v-avatar>
                 </td>
               <td class="text-xs-right"> {{ props.item.nome }}</td>

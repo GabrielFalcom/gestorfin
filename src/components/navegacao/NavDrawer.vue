@@ -6,7 +6,7 @@
       </div>
     </div>
     <v-list>
-      <v-list-group prepend-icon="list_alt" value="true" no-action>
+      <v-list-group prepend-icon="list_alt" :value="true" no-action>
         <template v-slot:activator>
           <v-list-tile>
             <v-list-tile-title>Cadastros</v-list-tile-title>
@@ -16,6 +16,20 @@
           <v-list-tile-title v-text="cad.label"></v-list-tile-title>
           <v-list-tile-action>
             <v-icon v-text="cad.icon"></v-icon>
+          </v-list-tile-action>
+        </v-list-tile>
+      </v-list-group>
+
+      <v-list-group prepend-icon="monetization_on" :value="false" no-action>
+        <template v-slot:activator>
+          <v-list-tile>
+            <v-list-tile-title>Finanças</v-list-tile-title>
+          </v-list-tile>
+        </template>
+        <v-list-tile v-for="(fin, i) in financa" :key="i" @click="navigateTo(fin.hrefName)">
+          <v-list-tile-title v-text="fin.label"></v-list-tile-title>
+          <v-list-tile-action>
+            <v-icon v-text="fin.icon"></v-icon>
           </v-list-tile-action>
         </v-list-tile>
       </v-list-group>
@@ -84,6 +98,18 @@ export default {
         icon: "shopping_cart",
         hrefName: "produto"
       }
+    ],
+     financa: [
+      {
+        label: "Contas a Pagar",
+        icon: "money_off",
+        hrefName: "contaspay"
+      },
+      {
+        label: "Contas a Receber",
+        icon: "attach_money",
+        hrefName: ""
+      },
     ],
     admins: [["Management", "people_outline"], ["Settings", "settings"]],
     cruds: [

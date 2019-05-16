@@ -6,32 +6,130 @@
           <v-card>
             <div>
               <v-form ref="form" v-model="valid">
-                <v-tabs centered color="amber darken-2" dark icons-and-text>
-                  <v-tabs-slider color="green dark-4"></v-tabs-slider>
+                <v-tabs centered color="blue-grey" dark icons-and-text>
+                  <v-tabs-slider color="grey darken-3"></v-tabs-slider>
 
                   <v-tab href="#tab-1">
                     Dados
                     <v-icon>list</v-icon>
                   </v-tab>
 
-                  <v-tab href="#tab-2">
-                    Dimensões
-                    <!-- <v-icon>fullscreen</v-icon> -->
-                    <v-icon>fitness_center</v-icon>
-                  </v-tab>
-
-                  <v-tab href="#tab-3">
-                    Descrição
-                    <v-icon>menu</v-icon>
-                  </v-tab>
-
-                  <v-tab href="#tab-4">
+                  <!-- <v-tab href="#tab-4">
                     Imagem
                     <v-icon>portrait</v-icon>
-                  </v-tab>
+                  </v-tab> -->
 
                   <v-tab-item :value="'tab-1'">
                     <v-container>
+                      <v-layout>
+                        <v-flex xs12 md3>
+                          <v-text-field v-model="dimensao.peso" label="Descrição  Pagamento"></v-text-field>
+                        </v-flex>
+
+                        <v-flex xs12 md3>
+                          <v-text-field v-model="dimensao.altura" prefix="R$" label="Valor"></v-text-field>
+                        </v-flex>
+
+                        <v-flex xs12 md3>
+                          <v-menu
+                            ref="menuVcmto"
+                            v-model="menuVcmto"
+                            :close-on-content-click="false"
+                            :nudge-right="40"
+                            lazy
+                            transition="scale-transition"
+                            offset-y
+                            full-width
+                            max-width="290px"
+                            min-width="290px"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-text-field
+                                readonly
+                                label="Data Vencimento"
+                                prepend-icon="event"
+                                v-on="on"
+                                v-model="dateVcmto"
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker v-model="dateVcmto" no-title @input="menuVcmto = false"></v-date-picker>
+                          </v-menu>
+                        </v-flex>
+
+                        <v-flex xs12 md3>
+                          <v-menu
+                            ref="menuEmss"
+                            v-model="menuEmss"
+                            :close-on-content-click="false"
+                            :nudge-right="40"
+                            lazy
+                            transition="scale-transition"
+                            offset-y
+                            full-width
+                            max-width="290px"
+                            min-width="290px"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-text-field
+                                readonly
+                                label="Data Emissão"
+                                prepend-icon="event"
+                                v-on="on"
+                                v-model="dateEmss"
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker v-model="dateEmss" no-title @input="menuEmss = false"></v-date-picker>
+                          </v-menu>
+                        </v-flex>
+
+                      </v-layout>
+
+                      <v-layout>
+                        <v-flex xs12 md3>
+                          <v-select
+                            v-model="formaPagSelected"
+                            :items="formaPag"
+                            label="Forma de Pagamento"
+                            required
+                          ></v-select>
+                        </v-flex>
+
+                        <v-flex xs12 md3>
+                          <v-radio-group v-model="radiobtn" label="Pagamento Quitado?" row>
+                            <v-radio label=" SIM " value="sim" color="indigo"></v-radio>
+                            <v-radio label=" NÃO " value="nao" color="red darken-3"></v-radio>
+                          </v-radio-group>
+                        </v-flex>
+                        
+                        <template v-if="radiobtn == 'sim'">
+                          <v-flex xs12 md3>
+                          <v-menu
+                            ref="menuCpsc"
+                            v-model="menuCpsc"
+                            :close-on-content-click="false"
+                            :nudge-right="40"
+                            lazy
+                            transition="scale-transition"
+                            offset-y
+                            full-width
+                            max-width="290px"
+                            min-width="290px"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-text-field
+                                readonly
+                                label="Data Compensação"
+                                prepend-icon="event"
+                                v-on="on"
+                                v-model="dateCpsc"
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker v-model="dateCpsc" no-title @input="menuCpsc = false"></v-date-picker>
+                          </v-menu>
+                        </v-flex>
+                        </template>
+                      </v-layout>
+
                       <v-layout>
                         <v-flex xs12 md6>
                           <v-select
@@ -41,45 +139,6 @@
                             label="Fornecedor"
                             required
                           ></v-select>
-                        </v-flex>
-                        <template v-if="dados.fornecedor != ''">
-                          <v-flex xs12 md3>
-                            <v-text-field v-model="dados.quantidade" label="Quantidade" required></v-text-field>
-                          </v-flex>
-                          <v-flex xs12 md3>
-                            <v-text-field v-model="dados.preco" prefix="R$" label="Preco" required></v-text-field>
-                          </v-flex>
-                        </template>
-                      </v-layout>
-                      <v-layout>
-                        <v-flex xs12 md12>
-                          <v-text-field v-model="dados.nome" label="Nome" required></v-text-field>
-                        </v-flex>
-                      </v-layout>
-                    </v-container>
-                  </v-tab-item>
-
-                  <v-tab-item :value="'tab-2'">
-                    <v-container>
-                      <v-layout>
-                        <v-flex xs12 md3>
-                          <v-text-field v-model="dimensao.peso" suffix="(Kg)" label="Peso"></v-text-field>
-                        </v-flex>
-
-                        <v-flex xs12 md3>
-                          <v-text-field v-model="dimensao.altura" suffix="(M)" label="Altura"></v-text-field>
-                        </v-flex>
-
-                        <v-flex xs12 md3>
-                          <v-text-field v-model="dimensao.largura" suffix="(M)" label="Largura"></v-text-field>
-                        </v-flex>
-
-                        <v-flex xs12 md3>
-                          <v-text-field
-                            v-model="dimensao.comprimento"
-                            suffix="(M)"
-                            label="Comprimento"
-                          ></v-text-field>
                         </v-flex>
                       </v-layout>
                     </v-container>
@@ -161,6 +220,21 @@ import { eventBus } from "../../main";
 
 export default {
   data: () => ({
+    formaPag: [
+      'Dinheiro',
+      'Cheque',
+      'Carne',
+      'Cartão Crédito',
+      'Cartão Débito',
+    ],
+    formaPagSelected:"",
+    radiobtn:"",
+    menuEmss:"",
+    menuCpsc:"",
+    menuVcmto: false,
+    dateEmss:"",
+    dateCpsc:"",
+    dateVcmto: "",
     update: false,
     loading: false,
     snackbar: false,
@@ -399,42 +473,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.custom-loader {
-  animation: loader 1s infinite;
-  display: flex;
-}
-@-moz-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@-webkit-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@-o-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-</style>

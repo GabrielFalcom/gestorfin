@@ -21,7 +21,7 @@
           
         </v-card-title>
         <template v-if="dialogTab == 'photo'">
-          <v-img :src="$url(content.imagem)"></v-img>
+          <img :src="$url(content.imagem)" style="width:400px;">
         </template>
         <template v-if="dialogTab == 'dados'">
           <v-list two-line>
@@ -89,13 +89,13 @@
           </v-list>
         </template>
         <template v-if="dialogTab == 'descricao'">
-                <v-card-text>{{ content.descricao }}</v-card-text>
+                <v-card-text style="white-space: pre-line">{{ content.descricao }}</v-card-text>
             </template>
 
           <template v-if="erase == true">
             <v-divider></v-divider>
             <strong>Atenção!</strong>
-            <p>Você tem certeza que deseja excluir esse Cliente?</p>
+            <p>Você tem certeza que deseja excluir esse Produto?</p>
             <v-divider></v-divider>
           </template>
 
@@ -116,7 +116,7 @@
               <strong style="color: white">Cancelar</strong>
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn flat @click="removeCliente" :loading="loading" :disabled="loading">
+            <v-btn flat @click="removeProduto" :loading="loading" :disabled="loading">
               <strong style="color: white">Deletar</strong>
             </v-btn>
           </v-card-actions>
@@ -141,11 +141,11 @@ export default {
     };
   },
   methods: {
-    removeCliente() {
+    removeProduto() {
       this.loading = true;
       this.$http
         .get(
-          "https://vuejs-http-6fd57.firebaseio.com/clientes.json?orderBy=%22id%22&equalTo=" +
+          "https://vuejs-http-6fd57.firebaseio.com/produtos.json?orderBy=%22id%22&equalTo=" +
             this.content.id
         )
         .then(response => {
@@ -155,7 +155,7 @@ export default {
         .then(function() {
           this.$http
             .delete(
-              "https://vuejs-http-6fd57.firebaseio.com/clientes/" +
+              "https://vuejs-http-6fd57.firebaseio.com/produtos/" +
                 this.chaveFirebase +
                 ".json"
             )
@@ -163,7 +163,7 @@ export default {
               response => {
                 console.log(response);
                 this.dialog = false;
-                //Apenas emitindo um evento para Clientes executar um callback pra renderizar a lista.
+                //Apenas emitindo um evento para Produtos executar um callback pra renderizar a lista.
                 this.$emit("event_dialog");
               },
               error => {
@@ -188,7 +188,3 @@ export default {
   }
 };
 </script>
-
-<style>
-/* background-color: #00C853; */
-</style>

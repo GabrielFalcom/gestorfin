@@ -17,7 +17,7 @@
           
         </v-card-title>
         <template v-if="dialogTab == 'photo'">
-          <v-img src="https://cdn.vuetifyjs.com/images/lists/ali.png" height="300px"></v-img>
+          <img :src="$url(content.imagem)" style="width:400px;">
         </template>
         <template v-else>
           <v-list two-line>
@@ -26,6 +26,14 @@
                 <v-icon color="indigo">person</v-icon>
               </v-list-tile-action>
 
+              <v-list-tile-content>
+                <v-list-tile-title>{{ content.nascimento }}</v-list-tile-title>
+                <v-list-tile-sub-title>Data Nascimento</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile>
+              <v-list-tile-action></v-list-tile-action>
               <v-list-tile-content>
                 <v-list-tile-title>{{ content.cpf }}</v-list-tile-title>
                 <v-list-tile-sub-title>CPF</v-list-tile-sub-title>
@@ -37,7 +45,7 @@
                 <v-list-tile-title>{{ content.rg }}</v-list-tile-title>
                 <v-list-tile-sub-title>RG</v-list-tile-sub-title>
               </v-list-tile-content>
-            </v-list-tile>
+            </v-list-tile>              
 
             <v-divider inset></v-divider>
 
