@@ -202,7 +202,7 @@ export default {
 
       this.$http
         .get(
-          "https://vuejs-http-6fd57.firebaseio.com/fornecedores.json?orderBy=%22id%22&limitToLast=1&print=pretty"
+          "https://vuejs-250c3.firebaseio.com/fornecedores.json?orderBy=%22id%22&limitToLast=1"
         )
         .then(response => {
           const resultArray = [];
@@ -214,7 +214,7 @@ export default {
         .then(function() {
           this.$http
             .post(
-              "https://vuejs-http-6fd57.firebaseio.com/fornecedores.json",
+              "https://vuejs-250c3.firebaseio.com/fornecedores.json",
               data
             )
             .then(
@@ -265,7 +265,7 @@ export default {
 
       this.$http
         .get(
-          "https://vuejs-http-6fd57.firebaseio.com/fornecedores.json?orderBy=%22id%22&equalTo="+this.idFornecedor
+          "https://vuejs-250c3.firebaseio.com/fornecedores.json?orderBy=%22id%22&equalTo="+this.idFornecedor
         )
         .then(response => {
           this.chaveFirebase=(Object.keys(response.body)[0]);
@@ -273,7 +273,7 @@ export default {
         .then(function() {
           this.$http
             .patch(
-              "https://vuejs-http-6fd57.firebaseio.com/fornecedores/"+this.chaveFirebase+'.json',
+              "https://vuejs-250c3.firebaseio.com/fornecedores/"+this.chaveFirebase+'.json',
               data
             )
             .then(
@@ -374,42 +374,3 @@ export default {
   }
 };
 </script>
-
-<style>
-/* .custom-loader {
-  animation: loader 1s infinite;
-  display: flex;
-}
-@-moz-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@-webkit-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@-o-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-} */
-</style>

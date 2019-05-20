@@ -1,20 +1,20 @@
 <template>
   <v-layout>
     <v-container grid-list-xl>
-      <DialogPagamento v-on:event_dialog="getPagamentos"></DialogPagamento>
+      <!-- <DialogPagamento v-on:event_dialog="getPagamentos"></DialogPagamento> -->
       <v-card>
-        <div class="titleCard" style="background-color: #546E7A">
-          <h2>Contas A Pagar</h2>
+        <div class="titleCard" style="background-color: #009688">
+          <h2>Contas A Receber</h2>
         </div>
         <v-card-title>
-          <v-btn @click="navigateTo" color="blue-grey" style="text-transform: none; color: white">
-            <v-icon style="padding-right: 5px">add_circle</v-icon>Adicionar Pagamento
+          <v-btn @click="navigateTo" color="teal lighten-1" style="text-transform: none; color: white">
+            <v-icon style="padding-right: 5px">add_circle</v-icon>Adicionar Recebimento
           </v-btn>
           <v-spacer></v-spacer>
 
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
-              <v-btn color="blue-grey" dark v-on="on" style="text-transform: none; color: white">
+              <v-btn color="teal lighten-1" dark v-on="on" style="text-transform: none; color: white">
                 <v-icon style="padding-right: 5px"> arrow_drop_down_circle </v-icon>{{itemSelect}}
               </v-btn>
             </template>
@@ -36,7 +36,7 @@
         </v-card-title>
         <v-data-table
           :headers="headers"
-          :items="pagamentos"
+          :items="recebimentos"
           :search="search"
           class="elevation-1"
           hide-actions
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import DialogPagamento from "./DialogPagamento.vue";
+// import DialogPagamento from "./DialogPagamento.vue";
 import { eventBus } from "../../main";
 
 export default {
@@ -84,7 +84,7 @@ export default {
         { text: "Situação", value: "status" },
         { text: "Ações", value: "" }
       ],
-      pagamentos: [],
+      recebimentos: [],
        itemSelect: "",
        items: [
         {id: 1, title: 'Jan' },
@@ -130,7 +130,7 @@ export default {
     },
     getPagamentos() {
       this.$http
-        .get("https://vuejs-250c3.firebaseio.com/pagamentos.json")
+        .get("https://vuejs-250c3.firebaseio.com/recebimentos.json")
         .then(response => {
           return response.json();
         })
@@ -139,19 +139,19 @@ export default {
           for (let key in data) {
             resultArray.push(data[key]);
           }
-          this.pagamentos = resultArray;
-          console.log(this.pagamentos);
+          this.recebimentos = resultArray;
+          console.log(this.recebimentos);
         });
     },
     navigateTo() {
-      this.$router.push({ name: "addpagamento" });
+      this.$router.push({ name: "addreceita" });
     },
     deadSpot() {
       event.stopPropagation();
     },
     editItem(row) {
       console.log(row);
-      this.$router.push({ name: "editpagamento", params: { content: row } });
+      this.$router.push({ name: "editreceita", params: { content: row } });
     },
     deleteItem(row) {
       console.log(row);
@@ -165,7 +165,7 @@ export default {
     }
   },
   components: {
-    DialogPagamento
+    // DialogPagamento
   },
   created() {
     this.getPagamentos();

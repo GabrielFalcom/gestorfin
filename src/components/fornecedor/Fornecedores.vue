@@ -80,7 +80,7 @@ export default {
     },
     getFornecedores() {
       this.$http
-        .get("https://vuejs-http-6fd57.firebaseio.com/fornecedores.json")
+        .get("https://vuejs-250c3.firebaseio.com//fornecedores.json")
         .then(response => {
           return response.json();
         })
@@ -102,9 +102,6 @@ export default {
     editItem(row){
       console.log(row);
       this.$router.push({ name: "editfornecedor", params: { content: row } });
-      // https://vuejs-http-6fd57.firebaseio.com/fornecedores.json?orderBy="id"&equalTo=9&print=pretty
-    // https://vuejs-http-6fd57.firebaseio.com/fornecedores.json?orderBy="id"&limitToLast=1&print=pretty
-    // https://vuejs-http-6fd57.firebaseio.com/fornecedores.json?orderBy="id"&limitToFirst=1&print=pretty
     },
     deleteItem(row) {
       console.log(row);

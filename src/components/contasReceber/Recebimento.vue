@@ -6,8 +6,7 @@
           <v-card>
             <div>
               <v-form ref="form" v-model="valid">
-                <v-card-title style="background-color:#546e7a"></v-card-title>
-
+                <v-card-title style="background-color:#009688"></v-card-title>
                 <v-container>
                   <v-layout>
                     <v-flex xs12 md3>
@@ -138,15 +137,15 @@
                     <v-flex xs12 md12>
                       <v-select
                         clearable
-                        v-model="dados.fornecedor"
-                        :items="fornecedores"
-                        label="Fornecedor"
+                        v-model="dados.cliente"
+                        :items="clientes"
+                        label="Clientes"
                         required
                       ></v-select>
                     </v-flex>
                   </v-layout>
                 </v-container>
-                <v-card-title style="background-color:#546e7a"></v-card-title>
+                <v-card-title style="background-color:#009688"></v-card-title>
               </v-form>
             </div>
           </v-card>
@@ -201,12 +200,12 @@ export default {
     idProduto: "",
     //Firebase tambem não permite PUT utilizando a referencia do objeto, apenas com sua chave de acesso.
     chaveFirebase: "",
-    fornecedores: [],
+    clientes: [],
     dados: {
       descricao: "",
       valor: "",
       formaPagSelected: "",
-      fornecedor: ""
+      cliente: ""
     },
     date: {
       emissao: "",
@@ -227,7 +226,7 @@ export default {
       data.descricao = this.dados.descricao;
       data.valor = this.dados.valor;
       data.formaPagSelected = this.dados.formaPagSelected;
-      data.fornecedor = this.dados.fornecedor;
+      data.cliente = this.dados.cliente;
 
       data.vencimento = this.date.vencimento;
       data.compensacao = this.date.compensacao;
@@ -244,7 +243,7 @@ export default {
 
       this.$http
         .get(
-          "https://vuejs-250c3.firebaseio.com/pagamentos.json?orderBy=%22id%22&limitToLast=1"
+          "https://vuejs-250c3.firebaseio.com/recebimentos.json?orderBy=%22id%22&limitToLast=1"
         )
         .then(response => {
           console.log(response);
@@ -260,7 +259,7 @@ export default {
         })
         .then(function() {
           this.$http
-            .post("https://vuejs-250c3.firebaseio.com/pagamentos.json", data)
+            .post("https://vuejs-250c3.firebaseio.com/recebimentos.json", data)
             .then(
               response => {
                 this.$refs.form.reset();
@@ -310,7 +309,7 @@ export default {
       data.descricao = this.dados.descricao;
       data.valor = this.dados.valor;
       data.formaPagSelected = this.dados.formaPagSelected;
-      data.fornecedor = this.dados.fornecedor;
+      data.cliente = this.dados.cliente;
 
       data.vencimento = this.date.vencimento;
       data.compensacao = this.date.compensacao;
@@ -325,7 +324,7 @@ export default {
 
       this.$http
         .get(
-          "https://vuejs-250c3.firebaseio.com/pagamentos.json?orderBy=%22id%22&equalTo=" +
+          "https://vuejs-250c3.firebaseio.com/recebimentos.json?orderBy=%22id%22&equalTo=" +
             this.idProduto
         )
         .then(response => {
@@ -334,7 +333,7 @@ export default {
         .then(function() {
           this.$http
             .patch(
-              "https://vuejs-250c3.firebaseio.com/pagamentos/" +
+              "https://vuejs-250c3.firebaseio.com/recebimentos/" +
                 this.chaveFirebase +
                 ".json",
               data
@@ -373,11 +372,11 @@ export default {
       this.dataCadastro = day + "/" + month + "/" + year;
     },
     cancelar() {
-      this.$router.push({ name: "contaspay" });
+      this.$router.push({ name: "contasrcb" });
     },
-    getFornecedres() {
+    getClientes() {
       this.$http
-        .get("https://vuejs-250c3.firebaseio.com/fornecedores.json")
+        .get("https://vuejs-250c3.firebaseio.com/clientes.json")
         .then(response => {
           return response.json();
         })
@@ -386,9 +385,9 @@ export default {
           for (let key in data) {
             var aux = data[key]["id"];
             resultArray[aux] = data[key]["nome"];
-            this.fornecedores.push(resultArray[aux]);
+            this.clientes.push(resultArray[aux]);
           }
-          console.log(this.fornecedores);
+          console.log(this.clientes);
         });
     }
   },
@@ -408,7 +407,7 @@ export default {
     this.dados.descricao = content.descricao;
     this.dados.valor = content.valor;
     this.dados.formaPagSelected = content.formaPagSelected;
-    this.dados.fornecedor = content.fornecedor;
+    this.dados.cliente = content.cliente;
 
     this.date.emissao = content.emissao;
     this.date.compensacao = content.compensacao;
@@ -417,7 +416,7 @@ export default {
     this.descricao = content.descricao;
   },
   created() {
-    this.getFornecedres();
+    this.getClientes();
   }
 };
 </script>

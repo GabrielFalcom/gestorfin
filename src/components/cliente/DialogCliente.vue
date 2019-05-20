@@ -190,7 +190,7 @@ export default {
       this.loading = true;
       this.$http
         .get(
-          "https://vuejs-http-6fd57.firebaseio.com/clientes.json?orderBy=%22id%22&equalTo=" +
+          "https://vuejs-250c3.firebaseio.com/clientes.json?orderBy=%22id%22&equalTo=" +
             this.content.id
         )
         .then(response => {
@@ -200,7 +200,7 @@ export default {
         .then(function() {
           this.$http
             .delete(
-              "https://vuejs-http-6fd57.firebaseio.com/clientes/" +
+              "https://vuejs-250c3.firebaseio.com/clientes/" +
                 this.chaveFirebase +
                 ".json"
             )

@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer :clipped="clipp" stateless :value="drawer.value" app>
     <div class="container fluid pb-0">
-      <div class="text-xs-center">
+      <div class="text-xs-center" style="cursor: pointer" @click="navigateTo('home')">
         <img alt="Vue logo" src="../../assets/Vue.webp" width="90" height="90" class="center">
       </div>
     </div>
@@ -108,7 +108,7 @@ export default {
       {
         label: "Contas a Receber",
         icon: "attach_money",
-        hrefName: ""
+        hrefName: "contasrcb"
       },
     ],
     admins: [["Management", "people_outline"], ["Settings", "settings"]],

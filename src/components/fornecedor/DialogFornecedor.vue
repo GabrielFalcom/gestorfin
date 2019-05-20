@@ -116,12 +116,12 @@ export default {
     removeFornecedor() {
       this.$http
         .get(
-          "https://vuejs-http-6fd57.firebaseio.com/fornecedores.json?orderBy=%22id%22&equalTo="+this.content.id)
+          "https://vuejs-250c3.firebaseio.com/fornecedores.json?orderBy=%22id%22&equalTo="+this.content.id)
         .then(response => {
           console.log(response);
           this.chaveFirebase=(Object.keys(response.body)[0]);
         }).then(function() {
-          this.$http.delete("https://vuejs-http-6fd57.firebaseio.com/fornecedores/"+this.chaveFirebase+'.json')
+          this.$http.delete("https://vuejs-250c3.firebaseio.com/fornecedores/"+this.chaveFirebase+'.json')
             .then(
               response => {
                 console.log(response);

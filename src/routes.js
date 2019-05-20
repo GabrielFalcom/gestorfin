@@ -7,6 +7,8 @@ import Produtos from './components/produto/Produtos.vue'
 import Produto from './components/produto/AddProduto.vue'
 import ContasPagar from './components/contasPagar/ContasPagar.vue'
 import Pagamento from './components/contasPagar/Pagamento.vue'
+import ContasReceber from './components/contasReceber/ContasReceber.vue'
+import Recebimento from './components/contasReceber/Recebimento.vue'
 
 export const routes = [ 
     {
@@ -77,6 +79,26 @@ export const routes = [
         path: '/contasapagar/adicionar',
         name: 'addpagamento',
         component: Pagamento,
+    },
+    {
+        path: '/contasapagar/editar',
+        name: 'editpagamento',
+        component: Pagamento,
+    },
+    {
+        path: '/contasreceber',
+        name: 'contasrcb',
+        component: ContasReceber,
+    },
+    {
+        path: '/contasreceber/adicionar',
+        name: 'addreceita',
+        component: Recebimento,
+    },
+    {
+        path: '/contasreceber/editar',
+        name: 'editreceita',
+        component: Recebimento,
     },
     {
         path: '*', redirect: { name: 'home'}

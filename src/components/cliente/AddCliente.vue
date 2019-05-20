@@ -233,7 +233,7 @@ export default {
 
       this.$http
         .get(
-          "https://vuejs-http-6fd57.firebaseio.com/clientes.json?orderBy=%22id%22&limitToLast=1&print=pretty"
+          "https://vuejs-250c3.firebaseio.com/clientes.json?orderBy=%22id%22&limitToLast=1"
         )
         .then(response => {
           if (response.body != null) {
@@ -248,7 +248,7 @@ export default {
         })
         .then(function() {
           this.$http
-            .post("https://vuejs-http-6fd57.firebaseio.com/clientes.json", data)
+            .post("https://vuejs-250c3.firebaseio.com/clientes.json", data)
             .then(
               response => {
                 this.$refs.form.reset();
@@ -295,7 +295,7 @@ export default {
 
       this.$http
         .get(
-          "https://vuejs-http-6fd57.firebaseio.com/clientes.json?orderBy=%22id%22&equalTo=" +
+          "https://vuejs-250c3.firebaseio.com/clientes.json?orderBy=%22id%22&equalTo=" +
             this.idCliente
         )
         .then(response => {
@@ -304,7 +304,7 @@ export default {
         .then(function() {
           this.$http
             .patch(
-              "https://vuejs-http-6fd57.firebaseio.com/clientes/" +
+              "https://vuejs-250c3.firebaseio.com/" +
                 this.chaveFirebase +
                 ".json",
               data

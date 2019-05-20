@@ -220,7 +220,7 @@ export default {
 
       this.$http
         .get(
-          "https://vuejs-http-6fd57.firebaseio.com/produtos.json?orderBy=%22id%22&limitToLast=1&print=pretty"
+          "https://vuejs-250c3.firebaseio.com/produtos.json?orderBy=%22id%22&limitToLast=1"
         )
         .then(response => {
           console.log(response);
@@ -236,7 +236,7 @@ export default {
         })
         .then(function() {
           this.$http
-            .post("https://vuejs-http-6fd57.firebaseio.com/produtos.json", data)
+            .post("https://vuejs-250c3.firebaseio.com/produtos.json", data)
             .then(
               response => {
                 this.$refs.form.reset();
@@ -281,7 +281,7 @@ export default {
 
       this.$http
         .get(
-          "https://vuejs-http-6fd57.firebaseio.com/produtos.json?orderBy=%22id%22&equalTo=" +
+          "https://vuejs-250c3.firebaseio.com/produtos.json?orderBy=%22id%22&equalTo=" +
             this.idProduto
         )
         .then(response => {
@@ -290,7 +290,7 @@ export default {
         .then(function() {
           this.$http
             .patch(
-              "https://vuejs-http-6fd57.firebaseio.com/produtos/" +
+              "https://vuejs-250c3.firebaseio.com/produtos/" +
                 this.chaveFirebase +
                 ".json",
               data
@@ -355,7 +355,7 @@ export default {
     },
     getFornecedres() {
       this.$http
-        .get("https://vuejs-http-6fd57.firebaseio.com/fornecedores.json")
+        .get("https://vuejs-250c3.firebaseio.com/fornecedores.json")
         .then(response => {
           return response.json();
         })

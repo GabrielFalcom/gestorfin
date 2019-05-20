@@ -135,7 +135,7 @@ export default {
       dialogTab: 'photo',
       dialog: false,
       loading: false,
-      selectedClass: "cardTitleClt",
+      selectedClass: "",
       erase: false,
       chaveFirebase: ""
     };
@@ -145,7 +145,7 @@ export default {
       this.loading = true;
       this.$http
         .get(
-          "https://vuejs-http-6fd57.firebaseio.com/produtos.json?orderBy=%22id%22&equalTo=" +
+          "https://vuejs-250c3.firebaseio.com/produtos.json?orderBy=%22id%22&equalTo=" +
             this.content.id
         )
         .then(response => {
@@ -155,7 +155,7 @@ export default {
         .then(function() {
           this.$http
             .delete(
-              "https://vuejs-http-6fd57.firebaseio.com/produtos/" +
+              "https://vuejs-250c3.firebaseio.com/produtos/" +
                 this.chaveFirebase +
                 ".json"
             )
@@ -182,7 +182,7 @@ export default {
       if (this.erase == true) {
         this.selectedClass = "cardTitleDelete";
       } else {
-        this.selectedClass = "cardTitleClt";
+        this.selectedClass = "cardTitlePrdt";
       }
     });
   }

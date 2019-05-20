@@ -85,7 +85,7 @@ export default {
     },
     getProdutos() {
       this.$http
-        .get("https://vuejs-http-6fd57.firebaseio.com/produtos.json")
+        .get("https://vuejs-250c3.firebaseio.com/produtos.json")
         .then(response => {
           return response.json();
         })
@@ -123,14 +123,3 @@ export default {
   }
 };
 </script>
-
-<style>
-     /* .rowTable:hover { 
-        background-color: #ffe2e2;
-    } */
-
-    /* .titleCard {
-      background-color: #448AFF !important;
-      border-color: #448AFF !important;
-    }  */
-</style>

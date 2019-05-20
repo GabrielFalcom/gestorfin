@@ -1,16 +1,21 @@
+.cardTitlePgmt {
+  background-color: #607d8b;
+}
+
 .cardTitleDelete {
   background-color: #fb0000;
-  color: white;
+}
+
+.cardTitlePrdt {
+  background-color: #FFC107;
 }
 
 .cardTitleFncd {
   background-color: #00C853;
-  color: white;
 }
 
 .cardTitleClt {
   background-color: #448AFF;
-  color: white;
 }
 
 .rowTable {
