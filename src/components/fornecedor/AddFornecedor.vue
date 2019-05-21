@@ -6,6 +6,7 @@
           <v-card>
             <div>
               <v-form ref="form" v-model="valid">
+                <v-card-title style="background-color:#00c853"></v-card-title>
                 <v-container>
                   <v-subheader>
                     <v-icon style="padding-right: 5px">work</v-icon> Dados Empresariais 
@@ -101,6 +102,7 @@
                     </v-flex>
                   </v-layout>
                 </v-container>
+                <v-card-title style="background-color:#00c853"></v-card-title>
               </v-form>
             </div>
           </v-card>

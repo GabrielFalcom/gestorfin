@@ -6,20 +6,20 @@
           <v-card>
             <div>
               <v-form ref="form" v-model="valid">
-                <v-tabs centered color="#448AFF" dark icons-and-text>
+                <v-tabs centered color="#448AFF" dark icons-and-text height="40">
                   <v-tabs-slider color="yellow dark-4"></v-tabs-slider>
 
                   <v-tab href="#tab-1">
                     Dados
-                    <v-icon>list</v-icon>
+                    <v-icon style="padding:0; margin:0;">list</v-icon>
                   </v-tab>
 
                   <v-tab href="#tab-2">
                     Imagem
-                    <v-icon>portrait</v-icon>
+                    <v-icon style="padding:0; margin:0;">portrait</v-icon>
                   </v-tab>
                 <v-tab-item :value="'tab-1'">
-                  <v-container>
+                  <v-container> 
                     <v-subheader>
                       <v-icon style="padding-right: 5px">work</v-icon>Dados Pessoais
                     </v-subheader>
@@ -136,6 +136,7 @@
                     </v-container>
                   </v-tab-item>
                 </v-tabs>
+                <v-card-title style="background-color:#4589fb"></v-card-title>
               </v-form>
             </div>
           </v-card>

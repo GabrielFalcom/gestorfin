@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-container grid-list-xl>
-      <!-- <DialogPagamento v-on:event_dialog="getPagamentos"></DialogPagamento> -->
+      <DialogRecebimento v-on:event_dialog="getRecebimentos"></DialogRecebimento>
       <v-card>
         <div class="titleCard" style="background-color: #009688">
           <h2>Contas A Receber</h2>
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-// import DialogPagamento from "./DialogPagamento.vue";
+import DialogRecebimento from "./DialogRecebimento.vue";
 import { eventBus } from "../../main";
 
 export default {
@@ -128,7 +128,7 @@ export default {
         deleteRow: false
       });
     },
-    getPagamentos() {
+    getRecebimentos() {
       this.$http
         .get("https://vuejs-250c3.firebaseio.com/recebimentos.json")
         .then(response => {
@@ -165,10 +165,10 @@ export default {
     }
   },
   components: {
-    // DialogPagamento
+    DialogRecebimento
   },
   created() {
-    this.getPagamentos();
+    this.getRecebimentos();
     this.getPeriodo(new Date().getMonth(), new Date().toLocaleDateString('pt-br', {month: 'long'}));
   }
 };

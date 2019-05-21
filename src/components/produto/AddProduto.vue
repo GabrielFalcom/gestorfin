@@ -6,28 +6,28 @@
           <v-card>
             <div>
               <v-form ref="form" v-model="valid">
-                <v-tabs centered color="amber darken-2" dark icons-and-text>
+                <v-tabs centered color="amber darken-2" dark icons-and-text height="40">
                   <v-tabs-slider color="green dark-4"></v-tabs-slider>
 
-                  <v-tab href="#tab-1">
+                  <v-tab href="#tab-1" >
                     Dados
-                    <v-icon>list</v-icon>
+                    <v-icon style="padding:0; margin:0;">list</v-icon>
                   </v-tab>
 
                   <v-tab href="#tab-2">
                     Dimensões
                     <!-- <v-icon>fullscreen</v-icon> -->
-                    <v-icon>fitness_center</v-icon>
+                    <v-icon style="padding:0; margin:0;">fitness_center</v-icon>
                   </v-tab>
 
                   <v-tab href="#tab-3">
                     Descrição
-                    <v-icon>menu</v-icon>
+                    <v-icon style="padding:0; margin:0;">menu</v-icon>
                   </v-tab>
 
                   <v-tab href="#tab-4">
                     Imagem
-                    <v-icon>portrait</v-icon>
+                    <v-icon style="padding:0; margin:0;">portrait</v-icon>
                   </v-tab>
 
                   <v-tab-item :value="'tab-1'">
@@ -129,6 +129,7 @@
                     </v-container>
                   </v-tab-item>
                 </v-tabs>
+                <v-card-title style="background-color:#f59f30"></v-card-title>
               </v-form>
             </div>
           </v-card>
