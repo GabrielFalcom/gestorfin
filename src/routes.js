@@ -9,6 +9,7 @@ import ContasPagar from './components/contasPagar/ContasPagar.vue'
 import Pagamento from './components/contasPagar/Pagamento.vue'
 import ContasReceber from './components/contasReceber/ContasReceber.vue'
 import Recebimento from './components/contasReceber/Recebimento.vue'
+import AddEstoque from './components/estoque/AddEstoque.vue'
 
 export const routes = [ 
     {
@@ -99,6 +100,11 @@ export const routes = [
         path: '/contasreceber/editar',
         name: 'editreceita',
         component: Recebimento,
+    },
+    {
+        path: '/estoque/adicionar',
+        name: 'addestoque',
+        component: AddEstoque,
     },
     {
         path: '*', redirect: { name: 'home'}
