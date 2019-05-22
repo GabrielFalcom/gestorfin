@@ -1,106 +1,132 @@
 <template>
-  <v-layout>
-    <v-container grid-list-xl>
-      <v-layout>
-        <v-flex>
-          <v-card>
-            <div>
-              <v-form ref="form" v-model="valid">
-                <v-card-title
-                  style="background-color:#673AB7; color: white; padding: 8px"
-                  class="justify-center"
-                >Comprar Estoque</v-card-title>
-                <v-container>
-                  <v-layout>
-                    <v-flex xs12 md12>
-                      <v-select
-                        v-model="dados.fornecedor"
-                        :items="fornecedores"
-                        :rules="[v => !!v || 'Fornecedor é obrigatorio']"
-                        label="Produto"
-                        required
-                      ></v-select>
-                    </v-flex>
-                  </v-layout>
-                  <v-layout>
-                    <template v-if="dados.fornecedor != ''">
-                      <v-flex xs12 md3>
-                        <v-text-field v-model="dados.quantidade" label="Quantidade" required></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 md3>
-                        <v-text-field v-model="dados.preco" label="Fornecedor" disabled></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 md3>
-                        <v-text-field v-model="dados.preco" label="Valor Unitario(R$)" disabled></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 md3>
-                        <v-text-field v-model="dados.preco" label="Valor Total(R$)" disabled></v-text-field>
-                      </v-flex>
-                    </template>
-                  </v-layout>
-                  <v-layout>
-                    <v-flex xs12 md3>
-                      <v-menu
-                        ref="menuVencimento"
-                        v-model="menuVencimento"
-                        :close-on-content-click="false"
-                        :nudge-right="40"
-                        lazy
-                        transition="scale-transition"
-                        offset-y
-                        full-width
-                        max-width="290px"
-                        min-width="290px"
-                      >
-                        <template v-slot:activator="{ on }">
-                          <v-text-field
-                            readonly
-                            label="Data Vencimento"
-                            prepend-icon="event"
-                            v-on="on"
-                            v-model="date"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker v-model="date" no-title @input="menuVencimento = false"></v-date-picker>
-                      </v-menu>
-                    </v-flex>
+  <v-container grid-list-xl>
+    <v-card>
+      <v-form ref="form" v-model="valid">
+        <v-card-title
+          style="background-color:#673AB7; color: white; padding: 8px"
+          class="justify-center"
+        >Comprar Estoque</v-card-title>
+        <v-container fluid grid-list-md>
+          <v-layout row wrap>
+            <v-flex d-flex xs12 sm6 md6>
+              <v-layout row wrap>
+                <v-select
+                  v-model="dados.fornecedor"
+                  :items="produtos"
+                  item-text="nome"
+                  :rules="[v => !!v || 'Fornecedor é obrigatorio']"
+                  label="Produto"
+                  return-object
+                  required
+                ></v-select>
 
-                    <v-flex xs12 md3>
-                      <v-select
-                        v-model="formaPagSelected"
-                        :items="formaPag"
-                        label="Forma de Pagamento"
-                        required
-                      ></v-select>
-                    </v-flex>
-                  </v-layout>
-                </v-container>
-                <v-card-title style="background-color:#673AB7"></v-card-title>
-              </v-form>
-            </div>
-          </v-card>
-          <br>
+                <v-flex d-flex xs6 sm6>
+                  <v-text-field v-model="dados.quantidade" label="Quantidade" required></v-text-field>
+                </v-flex>
 
-          <template v-if="update == false">
-            <v-btn color="success" @click="submit" :loading="loading" :disabled="loading">Cadastrar</v-btn>
+                <v-flex d-flex xs6 sm6>
+                  <v-text-field v-model="dados.preco" label="Valor Unitario (R$)" disabled></v-text-field>
+                </v-flex>
 
-            <v-btn color="warning" @click="reset" :disabled="loading">Limpar Formulario</v-btn>
-          </template>
-          <template v-else>
-            <v-btn
-              color="success"
-              @click="updating"
-              :loading="loading"
-              :disabled="loading"
-            >Atualizar</v-btn>
-          </template>
-          <v-btn color="error" @click="cancelar" :disabled="loading">Cancelar</v-btn>
+                <v-flex d-flex xs6 sm6>
+                  <v-text-field v-model="dados.quantidade" label="Fornecedor" disabled></v-text-field>
+                </v-flex>
 
-          <v-snackbar v-model="snackbar" :bottom="true" :timeout="1750">{{snackResponse}}</v-snackbar>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </v-layout>
+                <v-flex d-flex xs6 sm6>
+                  <v-text-field v-model="dados.preco" label="Valor Total (R$)" disabled></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-flex>
+
+            <v-flex d-flex xs12 sm6 md6>
+              <img :src="$url(dados.fornecedor.imagem)" style="height:220px;">
+            </v-flex>
+          </v-layout>
+
+          <v-layout row wrap>
+            <v-flex d-flex xs12 md3>
+              <v-text-field v-model="dados.descricao" label="Descrição  Pagamento"></v-text-field>
+            </v-flex>
+
+            <v-flex d-flex xs12 md3>
+              <v-select
+                v-model="formaPagSelected"
+                :items="formaPag"
+                label="Forma de Pagamento"
+                required
+              ></v-select>
+            </v-flex>
+
+            <v-flex d-flex xs12 sm6 md3>
+              <v-menu
+                ref="menuVencimento"
+                v-model="menuVencimento"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                max-width="290px"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    readonly
+                    label="Data Vencimento"
+                    prepend-icon="event"
+                    v-on="on"
+                    v-model="date"
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="date" no-title @input="menuVencimento = false"></v-date-picker>
+              </v-menu>
+            </v-flex>
+
+            <v-flex xs12 md3>
+              <v-menu
+                ref="menuVencimento"
+                v-model="menuVencimento"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                max-width="290px"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    readonly
+                    label="Data Emissão"
+                    prepend-icon="event"
+                    v-on="on"
+                    v-model="date"
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="date" no-title @input="menuVencimento = false"></v-date-picker>
+              </v-menu>
+            </v-flex>
+          </v-layout>
+        </v-container>
+        <v-card-title style="background-color:#673AB7"></v-card-title>
+      </v-form>
+    </v-card>
+    <br>
+
+    <template v-if="update == false">
+      <v-btn color="success" @click="submit" :loading="loading" :disabled="loading">Cadastrar</v-btn>
+
+      <v-btn color="warning" @click="reset" :disabled="loading">Limpar Formulario</v-btn>
+    </template>
+    <template v-else>
+      <v-btn color="success" @click="updating" :loading="loading" :disabled="loading">Atualizar</v-btn>
+    </template>
+    <v-btn color="error" @click="cancelar" :disabled="loading">Cancelar</v-btn>
+
+    <v-snackbar v-model="snackbar" :bottom="true" :timeout="1750">{{snackResponse}}</v-snackbar>
+  </v-container>
 </template>
 
 <script>
@@ -108,7 +134,8 @@ import { eventBus } from "../../main";
 
 export default {
   data: () => ({
-    formaPagSelected:"",
+    formaPag:[],
+    formaPagSelected: "",
     menuVencimento: "",
     date: "",
     update: false,
@@ -120,7 +147,7 @@ export default {
     idProduto: "",
     //Firebase tambem não permite PUT utilizando a referencia do objeto, apenas com sua chave de acesso.
     chaveFirebase: "",
-    fornecedores: [],
+    produtos: [],
     dados: {
       nome: "",
       preco: "",
@@ -303,20 +330,27 @@ export default {
         this.image.file = "";
       }
     },
-    getFornecedres() {
+    getProdutos() {
       this.$http
-        .get("https://vuejs-250c3.firebaseio.com/fornecedores.json")
+        .get("https://vuejs-250c3.firebaseio.com/produtos.json")
         .then(response => {
           return response.json();
         })
         .then(data => {
-          const resultArray = {};
+          // const resultArray = {};
+          // for (let key in data) {
+          //   var aux = data[key]["id"];
+          //   resultArray[aux] = data[key]["nome"];
+          //   this.produtos.push(resultArray[aux]);
+          // }
+          // console.log(this.produtos);
+
+          const resultArray = [];
           for (let key in data) {
-            var aux = data[key]["id"];
-            resultArray[aux] = data[key]["nome"];
-            this.fornecedores.push(resultArray[aux]);
+            resultArray.push(data[key]);
           }
-          console.log(this.fornecedores);
+          this.produtos = resultArray;
+          console.log(this.produtos);
         });
     }
   },
@@ -345,7 +379,7 @@ export default {
     this.image = content.imagem;
   },
   created() {
-    this.getFornecedres();
+    this.getProdutos();
   }
 };
 </script>
