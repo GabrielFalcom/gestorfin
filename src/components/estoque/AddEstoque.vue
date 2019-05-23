@@ -11,41 +11,41 @@
             <v-flex d-flex xs12 sm6 md6>
               <v-layout row wrap>
                 <v-select
-                  v-model="dados.fornecedor"
+                  v-model="produto"
                   :items="produtos"
                   item-text="nome"
-                  :rules="[v => !!v || 'Fornecedor é obrigatorio']"
+                  :rules="[v => !!v || 'Produto é obrigatorio']"
                   label="Produto"
                   return-object
                   required
                 ></v-select>
 
                 <v-flex d-flex xs6 sm6>
-                  <v-text-field v-model="dados.quantidade" label="Quantidade" required></v-text-field>
+                  <v-text-field v-model="quantidade" label="Quantidade" required></v-text-field>
                 </v-flex>
 
                 <v-flex d-flex xs6 sm6>
-                  <v-text-field v-model="dados.preco" label="Valor Unitario (R$)" disabled></v-text-field>
+                  <v-text-field v-model="produto.preco" label="Valor Unitario (R$)" disabled></v-text-field>
                 </v-flex>
 
                 <v-flex d-flex xs6 sm6>
-                  <v-text-field v-model="dados.quantidade" label="Fornecedor" disabled></v-text-field>
+                  <v-text-field v-model="produto.fornecedor" label="Fornecedor" disabled></v-text-field>
                 </v-flex>
 
                 <v-flex d-flex xs6 sm6>
-                  <v-text-field v-model="dados.preco" label="Valor Total (R$)" disabled></v-text-field>
+                  <v-text-field v-model="total" label="Valor Total (R$)" disabled></v-text-field>
                 </v-flex>
               </v-layout>
             </v-flex>
 
             <v-flex d-flex xs12 sm6 md6>
-              <img :src="$url(dados.fornecedor.imagem)" style="height:220px;">
+              <img :src="$url(produto.imagem)" style="height:220px;">
             </v-flex>
           </v-layout>
 
           <v-layout row wrap>
             <v-flex d-flex xs12 md3>
-              <v-text-field v-model="dados.descricao" label="Descrição  Pagamento"></v-text-field>
+              <v-text-field v-model="descricao" label="Descrição  Pagamento"></v-text-field>
             </v-flex>
 
             <v-flex d-flex xs12 md3>
@@ -76,17 +76,17 @@
                     label="Data Vencimento"
                     prepend-icon="event"
                     v-on="on"
-                    v-model="date"
+                    v-model="date.vencimento"
                   ></v-text-field>
                 </template>
-                <v-date-picker v-model="date" no-title @input="menuVencimento = false"></v-date-picker>
+                <v-date-picker v-model="date.vencimento" no-title @input="menuVencimento = false"></v-date-picker>
               </v-menu>
             </v-flex>
 
             <v-flex xs12 md3>
               <v-menu
-                ref="menuVencimento"
-                v-model="menuVencimento"
+                ref="menuEmissao"
+                v-model="menuEmissao"
                 :close-on-content-click="false"
                 :nudge-right="40"
                 lazy
@@ -102,10 +102,10 @@
                     label="Data Emissão"
                     prepend-icon="event"
                     v-on="on"
-                    v-model="date"
+                    v-model="date.emissao"
                   ></v-text-field>
                 </template>
-                <v-date-picker v-model="date" no-title @input="menuVencimento = false"></v-date-picker>
+                <v-date-picker v-model="date.emissao" no-title @input="menuEmissao = false"></v-date-picker>
               </v-menu>
             </v-flex>
           </v-layout>
@@ -115,15 +115,9 @@
     </v-card>
     <br>
 
-    <template v-if="update == false">
-      <v-btn color="success" @click="submit" :loading="loading" :disabled="loading">Cadastrar</v-btn>
+      <v-btn color="success" @click="submit" :loading="loading" :disabled="loading">Registrar Aquisição</v-btn>
 
       <v-btn color="warning" @click="reset" :disabled="loading">Limpar Formulario</v-btn>
-    </template>
-    <template v-else>
-      <v-btn color="success" @click="updating" :loading="loading" :disabled="loading">Atualizar</v-btn>
-    </template>
-    <v-btn color="error" @click="cancelar" :disabled="loading">Cancelar</v-btn>
 
     <v-snackbar v-model="snackbar" :bottom="true" :timeout="1750">{{snackResponse}}</v-snackbar>
   </v-container>
@@ -134,11 +128,19 @@ import { eventBus } from "../../main";
 
 export default {
   data: () => ({
-    formaPag:[],
-    formaPagSelected: "",
+    formaPag: [
+      "Dinheiro",
+      "Cheque",
+      "Carne",
+      "Cartão Crédito",
+      "Cartão Débito"
+    ],
     menuVencimento: "",
-    date: "",
-    update: false,
+    menuEmissao: "",
+    date: {
+      vencimento:"",
+      emissao:"",
+    },
     loading: false,
     snackbar: false,
     snackResponse: "",
@@ -148,28 +150,15 @@ export default {
     //Firebase tambem não permite PUT utilizando a referencia do objeto, apenas com sua chave de acesso.
     chaveFirebase: "",
     produtos: [],
-    dados: {
-      nome: "",
-      preco: "",
-      quantidade: "",
-      fornecedor: ""
-    },
-    dimensao: {
-      peso: "",
-      altura: "",
-      largura: "",
-      comprimento: ""
-    },
+    produto: {},
+    preco: "",
+    quantidade: "",
     descricao: "",
+    formaPagSelected: "",
     dataCadastro: "",
-    image: {
-      name: "",
-      url: "",
-      file: ""
-    },
+    total:"0",
     dialog: false,
     dataCadastro: "",
-    comment: ""
   }),
   methods: {
     submit() {
@@ -179,21 +168,10 @@ export default {
 
       var data = {};
 
-      data.nome = this.dados.nome;
-      data.fornecedor = this.dados.fornecedor;
-      data.quantidade = this.dados.quantidade;
-      data.preco = this.dados.preco;
-
-      data.peso = this.dimensao.peso;
-      data.altura = this.dimensao.altura;
-      data.largura = this.dimensao.largura;
-      data.comprimento = this.dimensao.comprimento;
-
       data.descricao = this.descricao;
 
       data.dataCadastro = this.dataCadastro;
 
-      data.imagem = this.image;
 
       this.$http
         .get(
@@ -237,66 +215,9 @@ export default {
             );
         });
     },
-    updating() {
-      this.loading = true;
-
-      var data = {};
-
-      data.nome = this.dados.nome;
-      data.fornecedor = this.dados.fornecedor;
-      data.quantidade = this.dados.quantidade;
-      data.preco = this.dados.preco;
-
-      data.peso = this.dimensao.peso;
-      data.altura = this.dimensao.peso;
-      data.largura = this.dimensao.largura;
-      data.comprimento = this.dimensao.comprimento;
-
-      data.descricao = this.descricao;
-
-      data.imagem = this.image;
-
-      this.$http
-        .get(
-          "https://vuejs-250c3.firebaseio.com/produtos.json?orderBy=%22id%22&equalTo=" +
-            this.idProduto
-        )
-        .then(response => {
-          this.chaveFirebase = Object.keys(response.body)[0];
-        })
-        .then(function() {
-          this.$http
-            .patch(
-              "https://vuejs-250c3.firebaseio.com/produtos/" +
-                this.chaveFirebase +
-                ".json",
-              data
-            )
-            .then(
-              response => {
-                this.snackbar = true;
-                this.snackResponse = "Cadastro Atualizado com Sucesso!";
-                console.log(response);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                  this.cancelar();
-                }, 1750);
-              },
-              error => {
-                this.snackbar = true;
-                this.snackResponse = "Não foi possivel atualizar o cadastro";
-                console.log(error);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                }, 1750);
-              }
-            );
-        });
-    },
     reset() {
       this.$refs.form.reset();
+      this.produto = {};
     },
     formatDate() {
       var todayTime = new Date();
@@ -305,31 +226,6 @@ export default {
       var year = todayTime.getFullYear();
       this.dataCadastro = day + "/" + month + "/" + year;
     },
-    cancelar() {
-      this.$router.push({ name: "produto" });
-    },
-    pickFile() {
-      this.$refs.image.click();
-    },
-    onFilePicked(e) {
-      const files = e.target.files;
-      if (files[0] !== undefined) {
-        this.image.name = files[0].name;
-        if (this.image.name.lastIndexOf(".") <= 0) {
-          return;
-        }
-        const fr = new FileReader();
-        fr.readAsDataURL(files[0]);
-        fr.addEventListener("load", () => {
-          this.image.url = fr.result;
-          this.image.file = files[0]; // this is an image file that can be sent to server...
-        });
-      } else {
-        this.image.name = "";
-        this.image.url = "";
-        this.image.file = "";
-      }
-    },
     getProdutos() {
       this.$http
         .get("https://vuejs-250c3.firebaseio.com/produtos.json")
@@ -337,14 +233,6 @@ export default {
           return response.json();
         })
         .then(data => {
-          // const resultArray = {};
-          // for (let key in data) {
-          //   var aux = data[key]["id"];
-          //   resultArray[aux] = data[key]["nome"];
-          //   this.produtos.push(resultArray[aux]);
-          // }
-          // console.log(this.produtos);
-
           const resultArray = [];
           for (let key in data) {
             resultArray.push(data[key]);
@@ -354,31 +242,17 @@ export default {
         });
     }
   },
-  mounted() {
-    console.log(this.$route.params);
-    console.log(!("content" in this.$route.params));
-    if (!("content" in this.$route.params)) {
-      return;
+  watch: {
+    quantidade() {
+      if (this.quantidade){
+        this.total = Math.round(parseFloat(this.produto.preco.replace('.', '').replace(',', '.')) * parseInt(this.quantidade));
+      } else {
+        this.total = 0;
+      }
+      
     }
-    const content = this.$route.params.content;
-    this.update = true;
-    this.idProduto = content.id;
-
-    this.dados.fornecedor = content.fornecedor;
-    this.dados.quantidade = content.quantidade;
-    this.dados.preco = content.preco;
-    this.dados.nome = content.nome;
-
-    this.dimensao.peso = content.peso;
-    this.dimensao.altura = content.altura;
-    this.dimensao.largura = content.largura;
-    this.dimensao.comprimento = content.comprimento;
-
-    this.descricao = content.descricao;
-
-    this.image = content.imagem;
   },
-  created() {
+  mounted() {
     this.getProdutos();
   }
 };
