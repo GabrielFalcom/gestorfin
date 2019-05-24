@@ -115,9 +115,14 @@
     </v-card>
     <br>
 
-      <v-btn color="success" @click="submit" :loading="loading" :disabled="loading">Registrar Aquisição</v-btn>
+    <v-btn
+      color="success"
+      @click="submit"
+      :loading="loading"
+      :disabled="loading"
+    >Registrar Aquisição</v-btn>
 
-      <v-btn color="warning" @click="reset" :disabled="loading">Limpar Formulario</v-btn>
+    <v-btn color="warning" @click="reset" :disabled="loading">Limpar Formulario</v-btn>
 
     <v-snackbar v-model="snackbar" :bottom="true" :timeout="1750">{{snackResponse}}</v-snackbar>
   </v-container>
@@ -138,27 +143,29 @@ export default {
     menuVencimento: "",
     menuEmissao: "",
     date: {
-      vencimento:"",
-      emissao:"",
+      vencimento: "",
+      emissao: ""
     },
     loading: false,
     snackbar: false,
     snackResponse: "",
     valid: true,
-    //Firebase não cria um auto increment integer para atribuir ao payload. Vou injetar o valor em submit.
-    idProduto: "",
-    //Firebase tambem não permite PUT utilizando a referencia do objeto, apenas com sua chave de acesso.
     chaveFirebase: "",
     produtos: [],
-    produto: {},
+    produto: {
+      preco:"",
+      fornecedor:"",
+      imagem:"",
+      quantidade:"",
+      id: "",
+    },
     preco: "",
     quantidade: "",
     descricao: "",
     formaPagSelected: "",
-    dataCadastro: "",
-    total:"0",
+    total: "0",
     dialog: false,
-    dataCadastro: "",
+    dataCadastro: ""
   }),
   methods: {
     submit() {
@@ -166,46 +173,39 @@ export default {
 
       this.loading = true;
 
-      var data = {};
-
-      data.descricao = this.descricao;
-
-      data.dataCadastro = this.dataCadastro;
-
-
       this.$http
         .get(
-          "https://vuejs-250c3.firebaseio.com/produtos.json?orderBy=%22id%22&limitToLast=1"
+          "https://vuejs-250c3.firebaseio.com/produtos.json?orderBy=%22id%22&equalTo=" +
+            this.produto.id
         )
         .then(response => {
-          console.log(response);
-          if (response.body != null) {
-            const resultArray = [];
-            for (let key in response.body) {
-              resultArray.push(response.body[key]);
-            }
-            data.id = resultArray[0].id + 1;
-          } else {
-            data.id = 1;
-          }
+          this.chaveFirebase = Object.keys(response.body)[0];
+          console.log(response.body);
         })
         .then(function() {
+          var data = {};
+          data.quantidade = parseInt(this.quantidade) + parseInt(this.produto.quantidade);
           this.$http
-            .post("https://vuejs-250c3.firebaseio.com/produtos.json", data)
+            .patch(
+              "https://vuejs-250c3.firebaseio.com/produtos/" +
+                this.chaveFirebase +
+                ".json",
+              data
+            )
             .then(
               response => {
-                this.$refs.form.reset();
                 this.snackbar = true;
-                this.snackResponse = "Cadastro Realizado com Sucesso!";
+                this.snackResponse = "Cadastro Atualizado com Sucesso!";
                 console.log(response);
                 setTimeout(() => {
                   this.loading = false;
                   this.snackbar = false;
+                  this.reset();
                 }, 1750);
               },
               error => {
                 this.snackbar = true;
-                this.snackResponse = "Não foi possivel efetuar o cadastro";
+                this.snackResponse = "Não foi possivel atualizar o cadastro";
                 console.log(error);
                 setTimeout(() => {
                   this.loading = false;
@@ -213,11 +213,73 @@ export default {
                 }, 1750);
               }
             );
+        })
+        .then(function() {
+          var data = {};
+          data.dataCadastro = this.dataCadastro;
+          data.formaPagSelected = this.formaPagSelected;
+          data.descricao = this.descricao;
+          data.fornecedor = this.produto.fornecedor;
+
+          data.valor = this.total;
+          data.vencimento = this.date.vencimento;
+          data.emissao = this.date.emissao;
+
+          this.$http
+            .get(
+              "https://vuejs-250c3.firebaseio.com/pagamentos.json?orderBy=%22id%22&limitToLast=1"
+            )
+            .then(response => {
+              console.log(response);
+              if (response.body != null) {
+                const resultArray = [];
+                for (let key in response.body) {
+                  resultArray.push(response.body[key]);
+                }
+                data.id = resultArray[0].id + 1;
+              } else {
+                data.id = 1;
+              }
+            })
+            .then(function() {
+              this.$http
+                .post(
+                  "https://vuejs-250c3.firebaseio.com/pagamentos.json",
+                  data
+                )
+                .then(
+                  response => {
+                    this.snackbar = true;
+                    this.snackResponse = "Cadastro Realizado com Sucesso!";
+                    console.log(response);
+                    setTimeout(() => {
+                      this.loading = false;
+                      this.snackbar = false;
+                    }, 1750);
+                  },
+                  error => {
+                    this.snackbar = true;
+                    this.snackResponse = "Não foi possivel efetuar o cadastro";
+                    console.log(error);
+                    setTimeout(() => {
+                      this.loading = false;
+                      this.snackbar = false;
+                    }, 1750);
+                  }
+                );
+            });
         });
     },
     reset() {
       this.$refs.form.reset();
-      this.produto = {};
+      this.produto = {
+        preco:"",
+        fornecedor:"",
+        imagem:"",
+        quantidade:"",
+        id: "",
+      },
+      this.getProdutos();
     },
     formatDate() {
       var todayTime = new Date();
@@ -243,13 +305,19 @@ export default {
     }
   },
   watch: {
+    produto() {
+      this.quantidade = 0;
+    },
     quantidade() {
-      if (this.quantidade){
-        this.total = Math.round(parseFloat(this.produto.preco.replace('.', '').replace(',', '.')) * parseInt(this.quantidade));
+      console.log(this.produto);
+      if (this.quantidade) {
+        this.total = Math.round(
+          parseFloat(this.produto.preco.replace(".", "").replace(",", ".")) *
+            parseInt(this.quantidade)
+        );
       } else {
         this.total = 0;
       }
-      
     }
   },
   mounted() {
