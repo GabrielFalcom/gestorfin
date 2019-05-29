@@ -7,43 +7,39 @@
           class="justify-center"
         >Comprar Estoque</v-card-title>
         <v-container fluid grid-list-md>
-          <v-layout row wrap>
+            <div v-for="(item,index) in listaPrd" :key="index">
+          <v-layout >
             <v-flex d-flex xs12 sm6 md6>
-              <v-layout row wrap>
-                <v-flex d-flex xs12 sm12 md12>
-                  <v-select
-                    v-model="produto"
+                <v-select
+                    v-model="item[index]"
                     :items="produtos"
                     item-text="nome"
                     :rules="[v => !!v || 'Produto é obrigatorio']"
                     label="Produto"
                     return-object
                     required
-                  ></v-select>
-                </v-flex>
-
-                <v-flex d-flex xs6 sm6>
-                  <v-text-field v-model="quantidade" label="Quantidade" required></v-text-field>
-                </v-flex>
-
-                <v-flex d-flex xs6 sm6>
-                  <v-text-field v-model="produto.preco" label="Valor Unitario (R$)" disabled></v-text-field>
-                </v-flex>
-
-                <v-flex d-flex xs6 sm6>
-                  <v-text-field v-model="produto.fornecedor" label="Fornecedor" disabled></v-text-field>
-                </v-flex>
-
-                <v-flex d-flex xs6 sm6>
-                  <v-text-field v-model="total" label="Valor Total (R$)" disabled></v-text-field>
-                </v-flex>
-              </v-layout>
+                ></v-select>
             </v-flex>
 
-            <v-flex d-flex xs12 sm6 md6>
-              <img :src="$url(produto.imagem)" style="height:220px;">
+                <v-flex d-flex xs6 sm2 md2>
+                    <v-text-field v-model="quantidade" label="Quantidade" required></v-text-field>
+                </v-flex>
+
+                <v-flex d-flex xs6 sm2 md2 v-if="item">
+                    <v-text-field v-model="listaPrd[index].precoConsumo" label="Valor Unitario (R$)" disabled></v-text-field>
+                </v-flex>
+
+                <v-flex d-flex xs6 sm2 md2>
+                    <v-text-field v-model="total" label="Valor Total (R$)" disabled></v-text-field>
+                </v-flex>
+            </v-layout>
+            </div>
+
+            <v-layout row wrap>
+            <v-flex d-flex xs12 md3>
+              <v-btn color="success" @click="listaPrd.push({})">Cadastrar</v-btn>
             </v-flex>
-          </v-layout>
+            </v-layout>
 
           <v-layout row wrap>
             <v-flex d-flex xs12 md3>
@@ -154,13 +150,7 @@ export default {
     valid: true,
     chaveFirebase: "",
     produtos: [],
-    produto: {
-      preco:"",
-      fornecedor:"",
-      imagem:"",
-      quantidade:"",
-      id: "",
-    },
+    listaPrd: {},
     preco: "",
     quantidade: "",
     descricao: "",
@@ -274,13 +264,7 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
-      this.produto = {
-        preco:"",
-        fornecedor:"",
-        imagem:"",
-        quantidade:"",
-        id: "",
-      },
+      this.listaPrd = [],
       this.getProdutos();
     },
     formatDate() {
@@ -310,16 +294,19 @@ export default {
     produto() {
       this.quantidade = 0;
     },
-    quantidade() {
-      console.log(this.produto);
-      if (this.quantidade) {
-        this.total = Math.round(
-          parseFloat(this.produto.preco.replace(".", "").replace(",", ".")) *
-            parseInt(this.quantidade)
-        );
-      } else {
-        this.total = 0;
-      }
+    // quantidade() {
+    //   console.log(this.produto);
+    //   if (this.quantidade) {
+    //     this.total = Math.round(
+    //       parseFloat(this.listaPrd.precoConsumo.replace(".", "").replace(",", ".")) *
+    //         parseInt(this.quantidade)
+    //     );
+    //   } else {
+    //     this.total = 0;
+    //   }
+    // },
+    listaPrd() {
+        console.log(this.listaPrd);
     }
   },
   mounted() {

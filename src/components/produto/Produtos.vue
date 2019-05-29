@@ -35,7 +35,7 @@
                 </td>
               <td class="text-xs-right"> {{ props.item.nome }}</td>
               <td class="text-xs-right"> {{ props.item.quantidade }}</td>
-              <td class="justify-center">{{ props.item.preco }}</td>
+              <td class="justify-center">{{ props.item.precoCompra }}</td>
               <td class="justify-center">{{ props.item.fornecedor }}</td>
               <td class="justify-center">{{ props.item.dataCadastro }}</td>
               <td class="justify-center" @click="deadSpot">

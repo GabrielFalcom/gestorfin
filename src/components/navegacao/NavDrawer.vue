@@ -42,6 +42,15 @@
               <v-list-tile-title @click="navigateTo('addestoque')">Gerenciar Estoque</v-list-tile-title>
             </v-list-tile>
         </v-list>
+
+        <v-list style="cursor: pointer">
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon> calendar_today </v-icon>
+              </v-list-tile-action>
+              <v-list-tile-title @click="navigateTo('agenda')">Agenda</v-list-tile-title>
+            </v-list-tile>
+        </v-list>
         <!-- <v-list-tile v-for="(fin, i) in financa" :key="i" @click="navigateTo(fin.hrefName)">
           <v-list-tile-title v-text="fin.label"></v-list-tile-title>
           <v-list-tile-action>

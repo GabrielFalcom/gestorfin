@@ -43,11 +43,14 @@
                           ></v-select>
                         </v-flex>
                         <template v-if="dados.fornecedor != ''">
-                          <v-flex xs12 md3>
+                          <v-flex xs12 md2>
                             <v-text-field v-model="dados.quantidade" label="Quantidade" required></v-text-field>
                           </v-flex>
-                          <v-flex xs12 md3>
-                            <v-text-field v-model="dados.preco" prefix="R$" label="Preco" required></v-text-field>
+                          <v-flex xs12 md2>
+                            <v-text-field v-model="dados.precoCompra" prefix="R$" label="Preco de Compra" required></v-text-field>
+                          </v-flex>
+                          <v-flex xs12 md2>
+                            <v-text-field v-model="dados.precoConsumo" prefix="R$" label="Preco de Consumo" required></v-text-field>
                           </v-flex>
                         </template>
                       </v-layout>
@@ -174,7 +177,8 @@ export default {
     fornecedores: [],
     dados: {
       nome: "",
-      preco: "",
+      precoCompra: "",
+      precoConsumo: "",
       quantidade: "",
       fornecedor: ""
     },
@@ -206,7 +210,8 @@ export default {
       data.nome = this.dados.nome;
       data.fornecedor = this.dados.fornecedor;
       data.quantidade = this.dados.quantidade;
-      data.preco = this.dados.preco;
+      data.precoCompra = this.dados.precoCompra;
+      data.precoConsumo = this.dados.precoConsumo;
 
       data.peso = this.dimensao.peso;
       data.altura = this.dimensao.altura;
@@ -269,7 +274,8 @@ export default {
       data.nome = this.dados.nome;
       data.fornecedor = this.dados.fornecedor;
       data.quantidade = this.dados.quantidade;
-      data.preco = this.dados.preco;
+      data.precoCompra = this.dados.precoCompra;
+      data.precoConsumo = this.dados.precoConsumo;
 
       data.peso = this.dimensao.peso;
       data.altura = this.dimensao.peso;
@@ -383,7 +389,8 @@ export default {
 
     this.dados.fornecedor = content.fornecedor;
     this.dados.quantidade = content.quantidade;
-    this.dados.preco = content.preco;
+    this.dados.precoCompra = content.precoCompra;
+    this.dados.precoConsumo = content.precoConsumo;
     this.dados.nome = content.nome;
 
     this.dimensao.peso = content.peso;

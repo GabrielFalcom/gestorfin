@@ -68,20 +68,27 @@
                 <v-list-tile-title>{{ content.fornecedor }}</v-list-tile-title>
                 <v-list-tile-sub-title>Fornecedor</v-list-tile-sub-title>
               </v-list-tile-content>
-            </v-list-tile>
-            
-            <v-list-tile>
+
               <v-list-tile-action></v-list-tile-action>
               <v-list-tile-content>
                 <v-list-tile-title>{{ content.quantidade }}</v-list-tile-title>
                 <v-list-tile-sub-title>Quantidade</v-list-tile-sub-title>
               </v-list-tile-content>
+              
+            </v-list-tile>
+            
+            <v-list-tile>
+              <v-list-tile-action></v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>{{ content.precoConsumo }}</v-list-tile-title>
+                <v-list-tile-sub-title>Preço de Consumo</v-list-tile-sub-title>
+              </v-list-tile-content>
 
               <v-list-tile-action></v-list-tile-action>
 
               <v-list-tile-content>
-                <v-list-tile-title>R${{ content.preco }}</v-list-tile-title>
-                <v-list-tile-sub-title>Preço</v-list-tile-sub-title>
+                <v-list-tile-title>R${{ content.precoCompra }}</v-list-tile-title>
+                <v-list-tile-sub-title>Preço de Compra</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
 

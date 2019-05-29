@@ -10,6 +10,8 @@ import Pagamento from './components/contasPagar/Pagamento.vue'
 import ContasReceber from './components/contasReceber/ContasReceber.vue'
 import Recebimento from './components/contasReceber/Recebimento.vue'
 import AddEstoque from './components/estoque/AddEstoque.vue'
+import Agenda from './components/agenda/Agenda.vue'
+import MarcaHora from './components/agenda/MarcaHora.vue'
 
 export const routes = [ 
     {
@@ -105,6 +107,16 @@ export const routes = [
         path: '/estoque/adicionar',
         name: 'addestoque',
         component: AddEstoque,
+    },
+    {
+        path: '/agenda',
+        name: 'agenda',
+        component: Agenda,
+    },
+    {
+        path: '/agenda/marcar',
+        name: 'marcahora',
+        component: MarcaHora,
     },
     {
         path: '*', redirect: { name: 'home'}
