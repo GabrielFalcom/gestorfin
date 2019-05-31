@@ -16,7 +16,6 @@
             append-icon="search"
             label="Pesquisar"
             single-line
-            hide-details
           ></v-text-field>
         </v-card-title>
         <v-data-table
@@ -24,7 +23,6 @@
           :items="clientes"
           :search="search"
           class="elevation-1"
-          hide-actions
         >
           <template v-slot:items="props">
             <tr @click.stop="openModal(props.item)" class="rowTable">

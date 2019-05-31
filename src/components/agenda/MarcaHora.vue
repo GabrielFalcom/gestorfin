@@ -1,114 +1,175 @@
 <template>
   <v-container grid-list-xl>
-    <v-card>
+    <v-card color="blue-grey darken-1" dark>
       <v-form ref="form" v-model="valid">
         <v-card-title
-          style="background-color:#673AB7; color: white; padding: 8px"
+          style="background-color: #3F51B5; border-color: #3F51B5; color: white; padding: 0; height: 40px;"
           class="justify-center"
-        >Comprar Estoque</v-card-title>
-        <v-container fluid grid-list-md>
-            <div v-for="(item,index) in listaPrd" :key="index">
-          <v-layout >
-            <v-flex d-flex xs12 sm6 md6>
-                <v-select
-                    v-model="item[index]"
+        >Agendar Horario</v-card-title>
+        <v-tabs centered color="indigo dark-3" dark icons-and-text height="40">
+          <v-tabs-slider color="green"></v-tabs-slider>
+
+          <v-tab href="#tab-1">
+            Clientes & Produtos
+            <v-icon style="padding:0; margin:0;">account_balance</v-icon>
+          </v-tab>
+
+          <v-tab href="#tab-2">
+            Horario & Pagamento
+            <!-- <v-icon>fullscreen</v-icon> -->
+            <v-icon style="padding:0; margin:0;">access_time</v-icon>
+          </v-tab>
+
+          <v-tab-item :value="'tab-1'">
+            <v-container fluid grid-list-md>
+              <v-layout>
+                <v-flex d-flex x12 lg12>
+                  <v-autocomplete
+                    v-model="cliente"
+                    box
+                    chips
+                    multiple
+                    :items="clientes"
+                    item-text="nome"
+                    label="Clientes"
+                    return-object
+                    required
+                  >
+                  <template v-slot:selection="data">
+                <v-chip
+                  :selected="data.selected"
+                  close
+                  class="chip--select-multi"
+                  @input="remove(data.item)"
+                >
+                  <v-avatar>
+                    <img :src="data.item.imagem.url">
+                  </v-avatar>
+                  {{ data.item.nome }}
+                </v-chip>
+              </template>
+
+                  </v-autocomplete>
+                </v-flex>
+              </v-layout>
+              <v-layout v-for="(item,index) in produto" :key="index">
+                <v-flex d-flex xs12 sm6 md6>
+                  <v-select
+                    v-model="produto[index]"
                     :items="produtos"
                     item-text="nome"
                     :rules="[v => !!v || 'Produto é obrigatorio']"
                     label="Produto"
                     return-object
                     required
-                ></v-select>
-            </v-flex>
-
-                <v-flex d-flex xs6 sm2 md2>
-                    <v-text-field v-model="quantidade" label="Quantidade" required></v-text-field>
-                </v-flex>
-
-                <v-flex d-flex xs6 sm2 md2 v-if="item">
-                    <v-text-field v-model="listaPrd[index].precoConsumo" label="Valor Unitario (R$)" disabled></v-text-field>
+                  ></v-select>
                 </v-flex>
 
                 <v-flex d-flex xs6 sm2 md2>
-                    <v-text-field v-model="total" label="Valor Total (R$)" disabled></v-text-field>
+                  <v-text-field v-model="produto[index].qntConsumido" label="Quantidade" required></v-text-field>
                 </v-flex>
-            </v-layout>
-            </div>
 
-            <v-layout row wrap>
-            <v-flex d-flex xs12 md3>
-              <v-btn color="success" @click="listaPrd.push({})">Cadastrar</v-btn>
-            </v-flex>
-            </v-layout>
-
-          <v-layout row wrap>
-            <v-flex d-flex xs12 md3>
-              <v-text-field v-model="descricao" label="Descrição  Pagamento"></v-text-field>
-            </v-flex>
-
-            <v-flex d-flex xs12 md3>
-              <v-select
-                v-model="formaPagSelected"
-                :items="formaPag"
-                label="Forma de Pagamento"
-                required
-              ></v-select>
-            </v-flex>
-
-            <v-flex d-flex xs12 sm6 md3>
-              <v-menu
-                ref="menuVencimento"
-                v-model="menuVencimento"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                max-width="290px"
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
+                <v-flex d-flex xs6 sm2 md2>
                   <v-text-field
-                    readonly
-                    label="Data Vencimento"
-                    prepend-icon="event"
-                    v-on="on"
-                    v-model="date.vencimento"
+                    v-model="produto[index].precoConsumo"
+                    label="Valor Unitario (R$)"
+                    disabled
                   ></v-text-field>
-                </template>
-                <v-date-picker v-model="date.vencimento" no-title @input="menuVencimento = false"></v-date-picker>
-              </v-menu>
-            </v-flex>
+                </v-flex>
 
-            <v-flex xs12 md3>
-              <v-menu
-                ref="menuEmissao"
-                v-model="menuEmissao"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                max-width="290px"
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
+                <v-flex d-flex xs6 sm2 md2>
                   <v-text-field
-                    readonly
-                    label="Data Emissão"
-                    prepend-icon="event"
-                    v-on="on"
-                    v-model="date.emissao"
+                    :value="parseFloat(produto[index].qntConsumido * produto[index].precoConsumo.replace('.', '').replace(',', '.'))"
+                    label="Valor Total (R$)"
+                    disabled
                   ></v-text-field>
-                </template>
-                <v-date-picker v-model="date.emissao" no-title @input="menuEmissao = false"></v-date-picker>
-              </v-menu>
-            </v-flex>
-          </v-layout>
-        </v-container>
-        <v-card-title style="background-color:#673AB7"></v-card-title>
+                </v-flex>
+              </v-layout>
+
+              <v-layout>
+                <v-btn flat icon color="green" @click="addNewPrd">
+                  <v-icon>add</v-icon>
+                </v-btn>
+              </v-layout>
+
+              
+            </v-container>
+          </v-tab-item>
+
+          <v-tab-item :value="'tab-2'">
+            <v-container fluid grid-list-md>
+              <v-layout>
+                <v-flex xs12 sm6 md6>
+                  <v-time-picker v-model="e4" format="24hr" color="green lighten-1">
+                    <h1>Hora Inicio</h1>
+                  </v-time-picker>
+                </v-flex>
+
+                <v-flex xs12 sm6 md6>
+                  <v-time-picker
+                    v-model="e4"
+                    format="24hr"
+                    color="green lighten-1"
+                    header-color="primary"
+                  >
+                    <h1>Hora Fim</h1>
+                  </v-time-picker>
+                </v-flex>
+              </v-layout>
+
+              <v-layout row wrap>
+                <v-flex d-flex xs12 md3>
+                  <v-text-field v-model="descricao" label="Descrição  Pagamento"></v-text-field>
+                </v-flex>
+
+                <v-flex d-flex xs12 md3>
+                  <v-select
+                    v-model="formaPagSelected"
+                    :items="formaPag"
+                    label="Forma de Pagamento"
+                    required
+                  ></v-select>
+                </v-flex>
+
+                <v-flex d-flex xs12 md3>
+                  <v-text-field v-model="total" label="Valor Total (R$)" disabled></v-text-field>
+                </v-flex>
+
+                <v-flex d-flex xs12 sm6 md3>
+                  <v-menu
+                    ref="menuVencimento"
+                    v-model="menuVencimento"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        readonly
+                        label="Data do evento"
+                        prepend-icon="event"
+                        v-on="on"
+                        v-model="date.vencimento"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="date.vencimento"
+                      no-title
+                      @input="menuVencimento = false"
+                    ></v-date-picker>
+                  </v-menu>
+                </v-flex>
+              </v-layout>
+
+            </v-container>
+          </v-tab-item>
+        </v-tabs>
+        <v-card-title style="background-color: #3F51B5; padding: 0; height: 40px;"></v-card-title>
       </v-form>
     </v-card>
     <br>
@@ -140,19 +201,17 @@ export default {
     ],
     menuVencimento: "",
     menuEmissao: "",
-    date: {
-      vencimento: "",
-      emissao: ""
-    },
+    date: "",
     loading: false,
     snackbar: false,
     snackResponse: "",
     valid: true,
     chaveFirebase: "",
     produtos: [],
-    listaPrd: {},
+    produto: [{ precoConsumo: "" }],
+    clientes: [],
+    cliente: "",
     preco: "",
-    quantidade: "",
     descricao: "",
     formaPagSelected: "",
     total: "0",
@@ -176,7 +235,8 @@ export default {
         })
         .then(function() {
           var data = {};
-          data.quantidade = parseInt(this.quantidade) + parseInt(this.produto.quantidade);
+          data.quantidade =
+            parseInt(this.quantidade) + parseInt(this.produto.quantidade);
           this.$http
             .patch(
               "https://vuejs-250c3.firebaseio.com/produtos/" +
@@ -264,8 +324,7 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
-      this.listaPrd = [],
-      this.getProdutos();
+      (this.listaPrd = []), this.getProdutos();
     },
     formatDate() {
       var todayTime = new Date();
@@ -288,29 +347,39 @@ export default {
           this.produtos = resultArray;
           console.log(this.produtos);
         });
+    },
+    getClientes() {
+      this.$http
+        .get("https://vuejs-250c3.firebaseio.com/clientes.json")
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          const resultArray = [];
+          for (let key in data) {
+            resultArray.push(data[key]);
+          }
+          this.clientes = resultArray;
+          console.log(this.clientes);
+        });
+    },
+    addNewPrd() {
+      this.produto.push({ precoConsumo: "" });
+    }
+  },
+  computed: {
+    qntConsumido() {
+      return this.produto.map(produto => produto.qntConsumido);
     }
   },
   watch: {
-    produto() {
-      this.quantidade = 0;
-    },
-    // quantidade() {
-    //   console.log(this.produto);
-    //   if (this.quantidade) {
-    //     this.total = Math.round(
-    //       parseFloat(this.listaPrd.precoConsumo.replace(".", "").replace(",", ".")) *
-    //         parseInt(this.quantidade)
-    //     );
-    //   } else {
-    //     this.total = 0;
-    //   }
-    // },
-    listaPrd() {
-        console.log(this.listaPrd);
+    qntConsumido(newValue) {
+      console.log("change made to selection " + newValue);
     }
   },
   mounted() {
     this.getProdutos();
+    this.getClientes();
   }
 };
 </script>
