@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-xl>
-    <v-card color="blue-grey darken-1" dark>
+    <v-card>
       <v-form ref="form" v-model="valid">
         <v-card-title
           style="background-color: #3F51B5; border-color: #3F51B5; color: white; padding: 0; height: 40px;"
@@ -26,29 +26,43 @@
                 <v-flex d-flex x12 lg12>
                   <v-autocomplete
                     v-model="cliente"
+                    :items="clientes"
                     box
                     chips
-                    multiple
-                    :items="clientes"
-                    item-text="nome"
+                    background-color="indigo lighten-3"
                     label="Clientes"
+                    item-text="nome"
+                    multiple
                     return-object
                     required
                   >
-                  <template v-slot:selection="data">
-                <v-chip
-                  :selected="data.selected"
-                  close
-                  class="chip--select-multi"
-                  @input="remove(data.item)"
-                >
-                  <v-avatar>
-                    <img :src="data.item.imagem.url">
-                  </v-avatar>
-                  {{ data.item.nome }}
-                </v-chip>
-              </template>
+                    <template v-slot:selection="data">
+                      <v-chip
+                        :selected="data.selected"
+                        close
+                        class="chip--select-multi"
+                        @input="remove(data.item)"
+                      >
+                        <v-avatar>
+                          <img :src="data.item.imagem.url">
+                        </v-avatar>
+                        {{ data.item.nome }}
+                      </v-chip>
+                    </template>
 
+                    <template v-slot:item="data">
+                      <template v-if="typeof data.item !== 'object'">
+                        <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                      </template>
+                      <template v-else>
+                        <v-list-tile-avatar>
+                          <img :src="data.item.imagem.url">
+                        </v-list-tile-avatar>
+                        <v-list-tile-content>
+                          <v-list-tile-title v-html="data.item.nome"></v-list-tile-title>
+                        </v-list-tile-content>
+                      </template>
+                    </template>
                   </v-autocomplete>
                 </v-flex>
               </v-layout>
@@ -87,12 +101,10 @@
               </v-layout>
 
               <v-layout>
-                <v-btn flat icon color="green" @click="addNewPrd">
-                  <v-icon>add</v-icon>
+                <v-btn flat block color="green" @click="addNewPrd">
+                  <v-icon>add</v-icon> Adicionar Produto
                 </v-btn>
               </v-layout>
-
-              
             </v-container>
           </v-tab-item>
 
@@ -100,14 +112,14 @@
             <v-container fluid grid-list-md>
               <v-layout>
                 <v-flex xs12 sm6 md6>
-                  <v-time-picker v-model="e4" format="24hr" color="green lighten-1">
+                  <v-time-picker v-model="horaInicio" format="24hr" color="green lighten-1">
                     <h1>Hora Inicio</h1>
                   </v-time-picker>
                 </v-flex>
 
                 <v-flex xs12 sm6 md6>
                   <v-time-picker
-                    v-model="e4"
+                    v-model="horaFim"
                     format="24hr"
                     color="green lighten-1"
                     header-color="primary"
@@ -132,7 +144,7 @@
                 </v-flex>
 
                 <v-flex d-flex xs12 md3>
-                  <v-text-field v-model="total" label="Valor Total (R$)" disabled></v-text-field>
+                  <v-text-field v-model="montante" label="Montante (R$)" disabled></v-text-field>
                 </v-flex>
 
                 <v-flex d-flex xs12 sm6 md3>
@@ -165,7 +177,6 @@
                   </v-menu>
                 </v-flex>
               </v-layout>
-
             </v-container>
           </v-tab-item>
         </v-tabs>
@@ -214,9 +225,12 @@ export default {
     preco: "",
     descricao: "",
     formaPagSelected: "",
-    total: "0",
+    montante: 0,
     dialog: false,
-    dataCadastro: ""
+    dataCadastro: "",
+    horaIncio:"",
+    horaFim:"",
+    duration:"",
   }),
   methods: {
     submit() {
@@ -231,7 +245,6 @@ export default {
         )
         .then(response => {
           this.chaveFirebase = Object.keys(response.body)[0];
-          console.log(response.body);
         })
         .then(function() {
           var data = {};
@@ -248,7 +261,6 @@ export default {
               response => {
                 this.snackbar = true;
                 this.snackResponse = "Cadastro Atualizado com Sucesso!";
-                console.log(response);
                 setTimeout(() => {
                   this.loading = false;
                   this.snackbar = false;
@@ -258,7 +270,6 @@ export default {
               error => {
                 this.snackbar = true;
                 this.snackResponse = "Não foi possivel atualizar o cadastro";
-                console.log(error);
                 setTimeout(() => {
                   this.loading = false;
                   this.snackbar = false;
@@ -282,7 +293,6 @@ export default {
               "https://vuejs-250c3.firebaseio.com/pagamentos.json?orderBy=%22id%22&limitToLast=1"
             )
             .then(response => {
-              console.log(response);
               if (response.body != null) {
                 const resultArray = [];
                 for (let key in response.body) {
@@ -303,7 +313,6 @@ export default {
                   response => {
                     this.snackbar = true;
                     this.snackResponse = "Cadastro Realizado com Sucesso!";
-                    console.log(response);
                     setTimeout(() => {
                       this.loading = false;
                       this.snackbar = false;
@@ -312,7 +321,6 @@ export default {
                   error => {
                     this.snackbar = true;
                     this.snackResponse = "Não foi possivel efetuar o cadastro";
-                    console.log(error);
                     setTimeout(() => {
                       this.loading = false;
                       this.snackbar = false;
@@ -345,7 +353,6 @@ export default {
             resultArray.push(data[key]);
           }
           this.produtos = resultArray;
-          console.log(this.produtos);
         });
     },
     getClientes() {
@@ -360,12 +367,20 @@ export default {
             resultArray.push(data[key]);
           }
           this.clientes = resultArray;
-          console.log(this.clientes);
         });
     },
     addNewPrd() {
-      this.produto.push({ precoConsumo: "" });
-    }
+      const len = this.produto.length -1;
+      const obj = this.produto[len];
+      const isEmpty = parseInt(Object.keys(obj).length) > 1;
+      if (isEmpty) {
+        this.produto.push({ precoConsumo: "" });
+      }
+    },
+     remove (item) {
+        const index = this.cliente.indexOf(item)
+        if (index >= 0) this.cliente.splice(index, 1)
+      }
   },
   computed: {
     qntConsumido() {
@@ -373,8 +388,10 @@ export default {
     }
   },
   watch: {
-    qntConsumido(newValue) {
-      console.log("change made to selection " + newValue);
+    qntConsumido() {
+      const len = this.produto.length -1;
+      const obj = this.produto[len];
+
     }
   },
   mounted() {
