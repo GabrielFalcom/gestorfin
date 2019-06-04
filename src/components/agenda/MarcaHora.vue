@@ -102,7 +102,7 @@
 
               <v-layout>
                 <v-btn flat block color="green" @click="addNewPrd">
-                  <v-icon>add</v-icon> Adicionar Produto
+                  <v-icon>add</v-icon>Adicionar Produto
                 </v-btn>
               </v-layout>
             </v-container>
@@ -129,25 +129,8 @@
                 </v-flex>
               </v-layout>
 
-              <v-layout row wrap>
-                <v-flex d-flex xs12 md3>
-                  <v-text-field v-model="descricao" label="Descrição  Pagamento"></v-text-field>
-                </v-flex>
-
-                <v-flex d-flex xs12 md3>
-                  <v-select
-                    v-model="formaPagSelected"
-                    :items="formaPag"
-                    label="Forma de Pagamento"
-                    required
-                  ></v-select>
-                </v-flex>
-
-                <v-flex d-flex xs12 md3>
-                  <v-text-field v-model="montante" label="Montante (R$)" disabled></v-text-field>
-                </v-flex>
-
-                <v-flex d-flex xs12 sm6 md3>
+              <v-layout>
+                <v-flex d-flex xs8 sm8 md8 offset-xs3>
                   <v-menu
                     ref="menuVencimento"
                     v-model="menuVencimento"
@@ -166,15 +149,30 @@
                         label="Data do evento"
                         prepend-icon="event"
                         v-on="on"
-                        v-model="date.vencimento"
+                        v-model="date"
                       ></v-text-field>
                     </template>
-                    <v-date-picker
-                      v-model="date.vencimento"
-                      no-title
-                      @input="menuVencimento = false"
-                    ></v-date-picker>
+                    <v-date-picker v-model="date" no-title @input="menuVencimento = false"></v-date-picker>
                   </v-menu>
+                </v-flex>
+              </v-layout>
+
+              <v-layout row wrap>
+                <v-flex d-flex xs12 md4>
+                  <v-text-field v-model="descricao" label="Descrição  Pagamento"></v-text-field>
+                </v-flex>
+
+                <v-flex d-flex xs12 md4>
+                  <v-select
+                    v-model="formaPagSelected"
+                    :items="formaPag"
+                    label="Forma de Pagamento"
+                    required
+                  ></v-select>
+                </v-flex>
+
+                <v-flex d-flex xs12 md4>
+                  <v-text-field v-model="montante" label="Montante (R$)" disabled></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -185,6 +183,15 @@
     </v-card>
     <br>
 
+    <v-alert
+      :value="alert"
+      icon="warning"
+      type="error"
+      transition="scale-transition"
+    >
+      Ja possui agenda marcada para este dia. Escolha outra data.
+    </v-alert>
+
     <v-btn
       color="success"
       @click="submit"
@@ -192,8 +199,8 @@
       :disabled="loading"
     >Registrar Aquisição</v-btn>
 
-    <v-btn color="warning" @click="reset" :disabled="loading">Limpar Formulario</v-btn>
-
+    <v-btn color="error" @click="cancelar" :disabled="loading">Cancelar</v-btn>
+    
     <v-snackbar v-model="snackbar" :bottom="true" :timeout="1750">{{snackResponse}}</v-snackbar>
   </v-container>
 </template>
@@ -228,71 +235,35 @@ export default {
     montante: 0,
     dialog: false,
     dataCadastro: "",
-    horaIncio:"",
-    horaFim:"",
-    duration:"",
+    horaInicio: "",
+    horaFim: "",
+    duration: "",
+    aux: 0,
+    alert: false,
   }),
   methods: {
     submit() {
       this.formatDate();
-
+      this.diffMin();
+      console.log(this.date);
       this.loading = true;
+      var seguir = true;
 
-      this.$http
-        .get(
-          "https://vuejs-250c3.firebaseio.com/produtos.json?orderBy=%22id%22&equalTo=" +
-            this.produto.id
-        )
-        .then(response => {
-          this.chaveFirebase = Object.keys(response.body)[0];
-        })
-        .then(function() {
-          var data = {};
-          data.quantidade =
-            parseInt(this.quantidade) + parseInt(this.produto.quantidade);
-          this.$http
-            .patch(
-              "https://vuejs-250c3.firebaseio.com/produtos/" +
-                this.chaveFirebase +
-                ".json",
-              data
-            )
-            .then(
-              response => {
-                this.snackbar = true;
-                this.snackResponse = "Cadastro Atualizado com Sucesso!";
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                  this.reset();
-                }, 1750);
-              },
-              error => {
-                this.snackbar = true;
-                this.snackResponse = "Não foi possivel atualizar o cadastro";
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                }, 1750);
-              }
-            );
-        })
-        .then(function() {
-          var data = {};
-          data.dataCadastro = this.dataCadastro;
-          data.formaPagSelected = this.formaPagSelected;
-          data.descricao = this.descricao;
-          data.fornecedor = this.produto.fornecedor;
+      var data = {};
 
-          data.valor = this.total;
-          data.vencimento = this.date.vencimento;
-          data.emissao = this.date.emissao;
-
-          this.$http
-            .get(
-              "https://vuejs-250c3.firebaseio.com/pagamentos.json?orderBy=%22id%22&limitToLast=1"
-            )
-            .then(response => {
+      this.$http.get("https://vuejs-250c3.firebaseio.com/agenda.json?orderBy=%22date%22&equalTo=%22"+this.date+"%22").then(response => {
+        console.log(response.body);
+        if (response.body) {
+          seguir = false;
+          this.alert = true;
+          setTimeout(() => {
+            this.loading = false;
+            this.alert = false;
+          }, 3000);
+        }
+      if (seguir == true) {
+          console.log('seguir == true: '+seguir);
+          this.$http.get("https://vuejs-250c3.firebaseio.com/agenda.json?orderBy=%22id%22&limitToLast=1").then(response => {
               if (response.body != null) {
                 const resultArray = [];
                 for (let key in response.body) {
@@ -302,13 +273,59 @@ export default {
               } else {
                 data.id = 1;
               }
-            })
-            .then(function() {
+            }).then(function() {
+                data.title = this.descricao;
+                data.date = this.date;
+                data.time = this.horaInicio;
+                data.duration = this.duration;
+                data.timeEnd = this.horaFim;
+                data.formaPagSelected = this.formaPagSelected;
+                data.total = this.montante;
+                
               this.$http
-                .post(
-                  "https://vuejs-250c3.firebaseio.com/pagamentos.json",
-                  data
-                )
+                .post("https://vuejs-250c3.firebaseio.com/agenda.json", data)
+                .then(
+                  response => {
+                    console.log(response);
+                    this.snackbar = true;
+                    this.snackResponse = "Cadastro Realizado com Sucesso!";
+                    setTimeout(() => {
+                      this.loading = false;
+                      this.snackbar = false;
+                    }, 1750);
+                  },
+                  error => {
+                    this.snackbar = true;
+                    this.snackResponse = "Não foi possivel efetuar o cadastro";
+                    setTimeout(() => {
+                      this.loading = false;
+                      this.snackbar = false;
+                    }, 1750);
+                  }
+                );
+            }).then(function() {
+            this.$http.get("https://vuejs-250c3.firebaseio.com/recebimentos.json?orderBy=%22id%22&limitToLast=1").then(response => {
+              if (response.body != null) {
+                const resultArray = [];
+                for (let key in response.body) {
+                  resultArray.push(response.body[key]);
+                }
+                data.id = resultArray[0].id + 1;
+              } else {
+                data.id = 1;
+              }
+            }).then(function() {
+              data.dataCadastro = this.dataCadastro;
+              data.descricao = this.descricao;
+              data.valor = this.montante;
+              data.vencimento = this.date;
+              data.emissao = this.date;
+              data.formaPagSelected = this.formaPagSelected;
+              data.status = "Pago";
+              data.cliente = this.cliente;
+
+              this.$http
+                .post("https://vuejs-250c3.firebaseio.com/recebimentos.json", data)
                 .then(
                   response => {
                     this.snackbar = true;
@@ -329,10 +346,8 @@ export default {
                 );
             });
         });
-    },
-    reset() {
-      this.$refs.form.reset();
-      (this.listaPrd = []), this.getProdutos();
+      }
+      });
     },
     formatDate() {
       var todayTime = new Date();
@@ -370,17 +385,43 @@ export default {
         });
     },
     addNewPrd() {
-      const len = this.produto.length -1;
+      const len = this.produto.length - 1;
       const obj = this.produto[len];
       const isEmpty = parseInt(Object.keys(obj).length) > 1;
       if (isEmpty) {
         this.produto.push({ precoConsumo: "" });
       }
     },
-     remove (item) {
-        const index = this.cliente.indexOf(item)
-        if (index >= 0) this.cliente.splice(index, 1)
+    remove(item) {
+      const index = this.cliente.indexOf(item);
+      if (index >= 0) this.cliente.splice(index, 1);
+    },
+    loop(value, index, array) {
+      if (this.produto[index].qntConsumido != undefined) {
+        this.aux +=
+          parseInt(this.produto[index].qntConsumido) *
+          parseInt(this.produto[index].precoConsumo);
       }
+      this.montante = this.aux;
+      console.log(this.montante);
+    },
+    diffMin() {
+      var hi = this.horaInicio.split(":");
+      var hf = this.horaFim.split(":");
+      var hri = new Date().setHours(hi[0],hi[1]);
+      var hrf = new Date().setHours(hf[0],hf[1]);
+
+      if (hrf < hri) {
+        this.duration = -1;
+      }
+
+      var diff = (hrf - hri) / 1000;
+      diff /= 60;
+      this.duration = Math.abs(Math.round(diff));
+    },
+    cancelar() {
+      this.$router.push({ name: "agenda" });
+    },
   },
   computed: {
     qntConsumido() {
@@ -389,9 +430,10 @@ export default {
   },
   watch: {
     qntConsumido() {
-      const len = this.produto.length -1;
+      const len = this.produto.length - 1;
       const obj = this.produto[len];
-
+      this.aux = 0;
+      this.produto.forEach(this.loop);
     }
   },
   mounted() {

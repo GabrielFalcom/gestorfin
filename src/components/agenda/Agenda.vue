@@ -62,6 +62,7 @@
 export default {
   data: () => ({
     today: new Date().toISOString().substring(0, 10),
+    agenda: [{}],
     events: [
       {
         title: "Weekly Meeting",
@@ -85,7 +86,7 @@ export default {
     // convert the list of events into a map of lists keyed by date
     eventsMap() {
       const map = {};
-      this.events.forEach(e => (map[e.date] = map[e.date] || []).push(e));
+      this.agenda.forEach(e => (map[e.date] = map[e.date] || []).push(e));
       return map;
     },
     labelMes: function() {
@@ -94,6 +95,7 @@ export default {
   },
   mounted() {
     this.$refs.calendar.scrollToTime("08:00");
+    this.getAgenda();
   },
   methods: {
     open(event) {
@@ -101,6 +103,21 @@ export default {
     },
     navigateTo(){
       this.$router.push({ name: "marcahora" });
+    },
+    getAgenda() {
+      this.$http
+        .get("https://vuejs-250c3.firebaseio.com/agenda.json")
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          const resultArray = [];
+          for (let key in data) {
+            resultArray.push(data[key]);
+          }
+          this.agenda = resultArray;
+          console.log(this.agenda);
+        });
     }
   }
 };
