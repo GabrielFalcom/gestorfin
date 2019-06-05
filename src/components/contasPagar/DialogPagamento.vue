@@ -154,6 +154,7 @@ export default {
             .then(
               response => {
                 console.log(response);
+                this.loading = false;
                 this.dialog = false;
                 //Apenas emitindo um evento para Pagamentos executar um callback pra renderizar a lista.
                 this.$emit("event_dialog");

@@ -125,6 +125,8 @@
     >Registrar Aquisição</v-btn>
 
     <v-btn color="warning" @click="reset" :disabled="loading">Limpar Formulario</v-btn>
+    
+    <v-btn color="error" @click="cancelar" :disabled="loading">Cancelar</v-btn>
 
     <v-snackbar v-model="snackbar" :bottom="true" :timeout="1750">{{snackResponse}}</v-snackbar>
   </v-container>
@@ -282,6 +284,9 @@ export default {
         id: "",
       },
       this.getProdutos();
+    },
+    cancelar() {
+      this.$router.push({ name: "home" });
     },
     formatDate() {
       var todayTime = new Date();

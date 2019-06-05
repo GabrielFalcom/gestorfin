@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-container grid-list-xl>
-      <!-- <DialogProduto v-on:event_dialog="getProdutos"></DialogProduto> -->
+      <DialogAgenda v-on:event_dialog=""></DialogAgenda>
       <v-card>
         <div class="titleCard" style="background-color: #3F51B5; border-color: #3F51B5;">
           <h2>Agenda</h2>
@@ -28,7 +28,7 @@
                       :key="event.title"
                       :style="{ top: timeToY(event.time) + 'px', height: minutesToPixels(event.duration) + 'px' }"
                       class="my-event with-time"
-                      @click="open(event)"
+                      @click="openModal(event)"
                       v-html="event.title"
                     ></div>
                   </template>
@@ -59,6 +59,9 @@
 </template>
 
 <script>
+import { eventBus } from '../../main';
+import DialogAgenda from './DialogAgenda.vue';
+
 export default {
   data: () => ({
     today: new Date().toISOString().substring(0, 10),
@@ -98,8 +101,10 @@ export default {
     this.getAgenda();
   },
   methods: {
-    open(event) {
-      alert(event.title);
+    openModal(row) {
+      let rowOfDialog = row;
+      this.dialog = true;
+      eventBus.$emit('dialogTrigged', {'dialog':this.dialog, 'row':rowOfDialog, 'deleteRow': false });
     },
     navigateTo(){
       this.$router.push({ name: "marcahora" });
@@ -119,7 +124,10 @@ export default {
           console.log(this.agenda);
         });
     }
-  }
+  },
+  components: {
+    DialogAgenda
+  },
 };
 </script>
 

@@ -37,16 +37,16 @@
         <v-list style="cursor: pointer">
             <v-list-tile>
               <v-list-tile-action>
-                <v-icon> business </v-icon>
+                <v-icon> shopping_basket </v-icon>
               </v-list-tile-action>
-              <v-list-tile-title @click="navigateTo('addestoque')">Gerenciar Estoque</v-list-tile-title>
+              <v-list-tile-title @click="navigateTo('addestoque')">Comprar Estoque</v-list-tile-title>
             </v-list-tile>
         </v-list>
 
         <v-list style="cursor: pointer">
             <v-list-tile>
               <v-list-tile-action>
-                <v-icon> calendar_today </v-icon>
+                <v-icon> date_range </v-icon>
               </v-list-tile-action>
               <v-list-tile-title @click="navigateTo('agenda')">Agenda</v-list-tile-title>
             </v-list-tile>

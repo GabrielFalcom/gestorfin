@@ -242,6 +242,15 @@ export default {
     alert: false,
   }),
   methods: {
+    getAllClientes() {
+      console.log(this.cliente);
+      const data = this.cliente;
+      var clienteArray = [];
+          for (let key in data) {
+            clienteArray.push(data[key]['nome']);
+          }
+      return clienteArray;
+    },
     submit() {
       this.formatDate();
       this.diffMin();
@@ -252,8 +261,7 @@ export default {
       var data = {};
 
       this.$http.get("https://vuejs-250c3.firebaseio.com/agenda.json?orderBy=%22date%22&equalTo=%22"+this.date+"%22").then(response => {
-        console.log(response.body);
-        if (response.body) {
+        if (response.bodyText != "{}") {
           seguir = false;
           this.alert = true;
           setTimeout(() => {
@@ -322,7 +330,7 @@ export default {
               data.emissao = this.date;
               data.formaPagSelected = this.formaPagSelected;
               data.status = "Pago";
-              data.cliente = this.cliente;
+              data.cliente = this.getAllClientes();
 
               this.$http
                 .post("https://vuejs-250c3.firebaseio.com/recebimentos.json", data)

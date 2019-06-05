@@ -3,106 +3,85 @@
     <v-dialog v-model="dialog" width="550">
       <v-card>
         <v-card-title :class="selectedClass+' justify-center'">
-
-            <v-toolbar-title>{{ content.nome }}</v-toolbar-title>
-
-              <v-btn flat icon  @click="dialogTab = 'photo'">
-                <v-icon :color="dialogTab == 'photo' ? 'white' : 'yellow accent-3' ">portrait</v-icon>
-              </v-btn>
-
-              <v-btn flat icon  @click="dialogTab = 'descricao'">
-                <v-icon :color="dialogTab == 'descricao' ? 'white' : 'yellow accent-3' ">menu</v-icon>
-              </v-btn>
-
-            <v-btn flat icon @click="dialogTab = 'dados'">
-                <v-icon :color="dialogTab == 'dados' ? 'white' : 'yellow accent-3' ">list</v-icon>
-              </v-btn>
-
-          
+            <v-toolbar-title>{{ content.title }}</v-toolbar-title>
         </v-card-title>
-        <template v-if="dialogTab == 'photo'">
-          <img :src="$url(content.imagem)" style="width:400px;">
-        </template>
-        <template v-if="dialogTab == 'dados'">
+        
           <v-list two-line>
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-icon color="indigo">fitness_center</v-icon>
-              </v-list-tile-action>
-
-              <v-list-tile-content>
-                <v-list-tile-title>{{ content.altura }}</v-list-tile-title>
-                <v-list-tile-sub-title>Altura(M)</v-list-tile-sub-title>
-              </v-list-tile-content>
-
-              <v-list-tile-action></v-list-tile-action>
-
-              <v-list-tile-content>
-                <v-list-tile-title>{{ content.comprimento }}</v-list-tile-title>
-                <v-list-tile-sub-title>Comprimento(M)</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            
-            <v-list-tile>
-              <v-list-tile-action></v-list-tile-action>
-
-              <v-list-tile-content>
-                <v-list-tile-title>{{ content.largura }}</v-list-tile-title>
-                <v-list-tile-sub-title>Largura(M)</v-list-tile-sub-title>
-              </v-list-tile-content>
-
-              <v-list-tile-content>
-                <v-list-tile-title>{{ content.peso }}</v-list-tile-title>
-                <v-list-tile-sub-title>Peso(Kg)</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-
-            <v-divider inset></v-divider>
-
             <v-list-tile>
               <v-list-tile-action>
                 <v-icon color="indigo">list</v-icon>
               </v-list-tile-action>
 
               <v-list-tile-content>
-                <v-list-tile-title>{{ content.fornecedor }}</v-list-tile-title>
-                <v-list-tile-sub-title>Fornecedor</v-list-tile-sub-title>
+                <v-list-tile-title>{{ content.date }}</v-list-tile-title>
+                <v-list-tile-sub-title>Data Evento</v-list-tile-sub-title>
               </v-list-tile-content>
 
               <v-list-tile-action></v-list-tile-action>
+
               <v-list-tile-content>
-                <v-list-tile-title>{{ content.quantidade }}</v-list-tile-title>
-                <v-list-tile-sub-title>Quantidade</v-list-tile-sub-title>
+                <v-list-tile-title>{{ content.duration }}</v-list-tile-title>
+                <v-list-tile-sub-title>Minutos de Jogo</v-list-tile-sub-title>
               </v-list-tile-content>
-              
-            </v-list-tile>
             
+            </v-list-tile>
+
+
             <v-list-tile>
               <v-list-tile-action></v-list-tile-action>
               <v-list-tile-content>
-                <v-list-tile-title>{{ content.precoConsumo }}</v-list-tile-title>
-                <v-list-tile-sub-title>Preço de Consumo(R$)</v-list-tile-sub-title>
+                <v-list-tile-title>{{ content.time }}</v-list-tile-title>
+                <v-list-tile-sub-title>Inicio</v-list-tile-sub-title>
               </v-list-tile-content>
 
               <v-list-tile-action></v-list-tile-action>
 
               <v-list-tile-content>
-                <v-list-tile-title>{{ content.precoCompra }}</v-list-tile-title>
-                <v-list-tile-sub-title>Preço de Compra(R$)</v-list-tile-sub-title>
+                <v-list-tile-title>{{ content.timeEnd }}</v-list-tile-title>
+                <v-list-tile-sub-title>Termino</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>              
+
+            <v-divider inset></v-divider>
+
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon color="indigo">account_balance_wallet</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>{{ content.total }}</v-list-tile-title>
+                <v-list-tile-sub-title>Receita do Jogo (R$)</v-list-tile-sub-title>
+              </v-list-tile-content>
+
+              <v-list-tile-action></v-list-tile-action>
+
+              <v-list-tile-content>
+                <v-list-tile-title>{{ content.formaPagSelected }}</v-list-tile-title>
+                <v-list-tile-sub-title>Forma Pagamento</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
 
-            <v-divider inset></v-divider>
+            <v-list-tile>
+              <v-list-tile-action></v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title></v-list-tile-title>
+                <v-list-tile-sub-title>Status</v-list-tile-sub-title>
+              </v-list-tile-content>
+
+              <v-list-tile-action></v-list-tile-action>
+
+              <v-list-tile-content>
+                <v-list-tile-title></v-list-tile-title>
+                <v-list-tile-sub-title>Data Compensação</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>              
+
           </v-list>
-        </template>
-        <template v-if="dialogTab == 'descricao'">
-                <v-card-text style="white-space: pre-line">{{ content.descricao }}</v-card-text>
-            </template>
 
           <template v-if="erase == true">
             <v-divider></v-divider>
             <strong>Atenção!</strong>
-            <p>Você tem certeza que deseja excluir esse Produto?</p>
+            <p>Você tem certeza que deseja excluir esse registro da Agenda?</p>
             <v-divider></v-divider>
           </template>
 
@@ -123,7 +102,7 @@
               <strong style="color: white">Cancelar</strong>
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn flat @click="removeProduto" :loading="loading" :disabled="loading">
+            <v-btn flat @click="removeCliente" :loading="loading" :disabled="loading">
               <strong style="color: white">Deletar</strong>
             </v-btn>
           </v-card-actions>
@@ -139,20 +118,19 @@ export default {
   data() {
     return {
       content: {},
-      dialogTab: 'photo',
       dialog: false,
       loading: false,
-      selectedClass: "",
+      selectedClass: "cardTitleClt",
       erase: false,
       chaveFirebase: ""
     };
   },
   methods: {
-    removeProduto() {
+    removeCliente() {
       this.loading = true;
       this.$http
         .get(
-          "https://vuejs-250c3.firebaseio.com/produtos.json?orderBy=%22id%22&equalTo=" +
+          "https://vuejs-250c3.firebaseio.com/clientes.json?orderBy=%22id%22&equalTo=" +
             this.content.id
         )
         .then(response => {
@@ -162,7 +140,7 @@ export default {
         .then(function() {
           this.$http
             .delete(
-              "https://vuejs-250c3.firebaseio.com/produtos/" +
+              "https://vuejs-250c3.firebaseio.com/clientes/" +
                 this.chaveFirebase +
                 ".json"
             )
@@ -171,7 +149,7 @@ export default {
                 console.log(response);
                 this.loading = false;
                 this.dialog = false;
-                //Apenas emitindo um evento para Produtos executar um callback pra renderizar a lista.
+                //Apenas emitindo um evento para Clientes executar um callback pra renderizar a lista.
                 this.$emit("event_dialog");
               },
               error => {
@@ -190,9 +168,13 @@ export default {
       if (this.erase == true) {
         this.selectedClass = "cardTitleDelete";
       } else {
-        this.selectedClass = "cardTitlePrdt";
+        this.selectedClass = "cardTitleClt";
       }
     });
   }
 };
 </script>
+
+<style>
+/* background-color: #00C853; */
+</style>

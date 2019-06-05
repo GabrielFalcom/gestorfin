@@ -140,6 +140,7 @@
                         v-model="dados.cliente"
                         :items="clientes"
                         label="Clientes"
+                        return-object
                         required
                       ></v-select>
                     </v-flex>
@@ -205,7 +206,7 @@ export default {
       descricao: "",
       valor: "",
       formaPagSelected: "",
-      cliente: ""
+      cliente: [],
     },
     date: {
       emissao: "",

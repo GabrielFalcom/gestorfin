@@ -64,7 +64,7 @@
 
             <v-list-tile-action></v-list-tile-action>
             <template v-if="content.status == 'Pago'">
-            <v-list-tile-action></v-list-tile-action>
+              <v-list-tile-action></v-list-tile-action>
               <v-list-tile-content>
                 <v-list-tile-title>{{ content.compensacao }}</v-list-tile-title>
                 <v-list-tile-sub-title>Data Compensação</v-list-tile-sub-title>
@@ -73,16 +73,31 @@
           </v-list-tile>
 
           <template v-if="content.cliente != ''">
-            <v-divider inset></v-divider>
-            <v-list-tile>
-              <v-list-tile-action>
+            <template v-if="!(Array.isArray(content.cliente))">
+              <v-divider inset></v-divider>
+              <v-list-tile>
+                <v-list-tile-action>
                   <v-icon color="indigo">poll</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>{{ content.cliente }}</v-list-tile-title>
+                  <v-list-tile-sub-title>Cliente</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+
+            <template v-if="Array.isArray(content.cliente)">
+              <v-divider inset></v-divider>
+              <v-list-tile-action>
+                <v-icon color="indigo">poll</v-icon>
               </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ content.cliente }}</v-list-tile-title>
-                <v-list-tile-sub-title>Cliente</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
+              <v-list-tile v-for="(c,index) in content.cliente" :key="index">
+                <v-list-tile-content>
+                  <v-list-tile-title>{{c}}</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-list-tile-sub-title>Clientes</v-list-tile-sub-title>
+            </template>
           </template>
         </v-list>
 
@@ -154,6 +169,7 @@ export default {
             .then(
               response => {
                 console.log(response);
+                this.loading = false;
                 this.dialog = false;
                 //Apenas emitindo um evento para Recebimentos executar um callback pra renderizar a lista.
                 this.$emit("event_dialog");
