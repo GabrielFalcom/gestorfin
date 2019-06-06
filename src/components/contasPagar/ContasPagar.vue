@@ -31,7 +31,6 @@
             append-icon="search"
             label="Pesquisar"
             single-line
-            hide-details
           ></v-text-field>
         </v-card-title>
         <v-data-table
@@ -39,7 +38,6 @@
           :items="pagamentos"
           :search="search"
           class="elevation-1"
-          hide-actions
         >
           <template v-slot:items="props">
             <tr @click.stop="openModal(props.item)" class="rowTable">
@@ -48,7 +46,7 @@
               <td class="justify-center">{{ props.item.emissao }}</td>
               <td class="justify-center">{{ props.item.valor }}</td>
               <td class="justify-center">{{ props.item.formaPagSelected }}</td>
-              <td class="justify-center"> <v-chip :color="checkChip(props.item.status)" disabled text-color="white">{{ props.item.status }}</v-chip></td>
+              <td class="justify-center"> <v-chip :color="checkChip(props.item)[0]" disabled text-color="white">{{checkChip(props.item)[1]}}</v-chip></td>
               <td class="justify-center" @click="deadSpot">
                 <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
                 <v-icon small @click="deleteItem(props.item)">delete</v-icon>
@@ -103,16 +101,22 @@ export default {
     };
   },
   methods: {
-    checkChip(status){
-      if (status == 'Em Aberto') {
-        return 'warning'
-      } else if (status == 'Pago') {
-        return 'success'
-      } else if (status == 'Atrasado') {
-        return 'error'
-      } else {
-        return 'primary'
-      }
+    checkChip(item){
+      if (item.status == 'Pago') {
+        return ["success", "Pago"]
+      } 
+        var ano = item.vencimento.split('-')[0];
+        var mes = item.vencimento.split('-')[1];
+        var dia = item.vencimento.split('-')[2];
+        
+        var vencimento = new Date(ano,(mes - 1), dia);
+        console.log('vencimento: '+vencimento.getTime())
+        console.log('hoje: '+new Date().getTime());
+        if  (vencimento.getTime() < new Date().getTime()) {
+          return ["error", "Atrasado"]
+        } else if (vencimento.getTime() > new Date().getTime()) {
+          return ["warning", "Em Aberto"]
+        }
     },
     getPeriodo(mes, mesNome){
       const year = new Date().getFullYear();

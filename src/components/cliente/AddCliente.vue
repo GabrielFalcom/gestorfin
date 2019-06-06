@@ -18,99 +18,99 @@
                     Imagem
                     <v-icon style="padding:0; margin:0;">portrait</v-icon>
                   </v-tab>
-                <v-tab-item :value="'tab-1'">
-                  <v-container> 
-                    <v-subheader>
-                      <v-icon style="padding-right: 5px">work</v-icon>Dados Pessoais
-                    </v-subheader>
-                    <v-layout>
-                      <v-flex xs12 md4>
-                        <v-text-field
-                          v-model="pessoa.nomeCompleto"
-                          :rules="nameRules"
-                          label="Nome Completo"
-                          required
-                        ></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 md2>
-                        <v-text-field
-                          v-model="pessoa.nascimento"
-                          mask="##/##/####"
-                          return-masked-value
-                          label="Nascimento"
-                        ></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 md3>
-                        <v-text-field
-                          v-model="pessoa.cpf"
-                          mask="###.###.###-##"
-                          return-masked-value
-                          label="CPF"
-                        ></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 md3>
-                        <v-text-field v-model="pessoa.rg" label="RG"></v-text-field>
-                      </v-flex>
-                    </v-layout>
+                  <v-tab-item :value="'tab-1'">
+                    <v-container>
+                      <v-subheader>
+                        <v-icon style="padding-right: 5px">work</v-icon>Dados Pessoais
+                      </v-subheader>
+                      <v-layout>
+                        <v-flex xs12 md4>
+                          <v-text-field
+                            v-model="pessoa.nomeCompleto"
+                            :rules="nameRules"
+                            label="Nome Completo"
+                            required
+                          ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md2>
+                          <v-text-field
+                            v-model="pessoa.nascimento"
+                            mask="##/##/####"
+                            return-masked-value
+                            label="Nascimento"
+                          ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md3>
+                          <v-text-field
+                            v-model="pessoa.cpf"
+                            mask="###.###.###-##"
+                            return-masked-value
+                            label="CPF"
+                          ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md3>
+                          <v-text-field v-model="pessoa.rg" label="RG"></v-text-field>
+                        </v-flex>
+                      </v-layout>
 
-                    <v-subheader>
-                      <v-icon style="padding-right: 5px">contact_mail</v-icon>Dados de Contato
-                    </v-subheader>
-                    <v-layout>
-                      <v-flex xs12 md4>
-                        <v-text-field v-model="contato.email" :rules="emailRules" label="E-mail"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 md4>
-                        <v-text-field
-                          v-model="contato.telefone"
-                          mask="(##) ####-####"
-                          return-masked-value
-                          label="Telefone"
-                        ></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 md4>
-                        <v-text-field
-                          v-model="contato.celular"
-                          mask="(##) #####-####"
-                          return-masked-value
-                          label="Celular"
-                        ></v-text-field>
-                      </v-flex>
-                    </v-layout>
-                    <v-subheader>
-                      <v-icon style="padding-right: 5px">pin_drop</v-icon>Dados de Endereço
-                    </v-subheader>
-                    <v-layout>
-                      <v-flex xs12 md4>
-                        <v-text-field
-                          v-on:keyup.native="buscarCep"
-                          v-model="endereco.cep"
-                          label="CEP"
-                          mask="#####-###"
-                        ></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 md4>
-                        <v-text-field v-model="endereco.logradouro" label="Logradouro"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 md4>
-                        <v-text-field v-model="endereco.numero" label="Número"></v-text-field>
-                      </v-flex>
-                    </v-layout>
-                    <v-layout>
-                      <v-flex xs12 md4>
-                        <v-text-field v-model="endereco.complemento" label="Complemento"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 md4>
-                        <v-text-field v-model="endereco.bairro" label="Bairro"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 md4>
-                        <v-text-field v-model="endereco.localidade" label="Cidade/UF"></v-text-field>
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
-                </v-tab-item>
+                      <v-subheader>
+                        <v-icon style="padding-right: 5px">contact_mail</v-icon>Dados de Contato
+                      </v-subheader>
+                      <v-layout>
+                        <v-flex xs12 md4>
+                          <v-text-field v-model="contato.email" :rules="emailRules" label="E-mail"></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md4>
+                          <v-text-field
+                            v-model="contato.telefone"
+                            mask="(##) ####-####"
+                            return-masked-value
+                            label="Telefone"
+                          ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md4>
+                          <v-text-field
+                            v-model="contato.celular"
+                            mask="(##) #####-####"
+                            return-masked-value
+                            label="Celular"
+                          ></v-text-field>
+                        </v-flex>
+                      </v-layout>
+                      <v-subheader>
+                        <v-icon style="padding-right: 5px">pin_drop</v-icon>Dados de Endereço
+                      </v-subheader>
+                      <v-layout>
+                        <v-flex xs12 md4>
+                          <v-text-field
+                            v-on:keyup.native="buscarCep"
+                            v-model="endereco.cep"
+                            label="CEP"
+                            mask="#####-###"
+                          ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md4>
+                          <v-text-field v-model="endereco.logradouro" label="Logradouro"></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md4>
+                          <v-text-field v-model="endereco.numero" label="Número"></v-text-field>
+                        </v-flex>
+                      </v-layout>
+                      <v-layout>
+                        <v-flex xs12 md4>
+                          <v-text-field v-model="endereco.complemento" label="Complemento"></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md4>
+                          <v-text-field v-model="endereco.bairro" label="Bairro"></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md4>
+                          <v-text-field v-model="endereco.localidade" label="Cidade/UF"></v-text-field>
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
+                  </v-tab-item>
 
-                 <v-tab-item :value="'tab-2'">
+                  <v-tab-item :value="'tab-2'">
                     <v-container>
                       <v-layout>
                         <v-flex
@@ -205,133 +205,151 @@ export default {
       url: "",
       file: ""
     },
-    dataCadastro: "",
+    dataCadastro: ""
   }),
   methods: {
     submit() {
-      this.formatDate();
+      if (this.$refs.form.validate()) {
+        this.formatDate();
 
-      this.loading = true;
-      var data = {};
+        this.loading = true;
+        var data = {};
 
-      data.nome = this.pessoa.nomeCompleto;
-      data.cpf = this.pessoa.cpf;
-      data.rg = this.pessoa.rg;
-      data.nascimento = this.pessoa.nascimento;
-      data.email = this.contato.email;
-      data.telefone = this.contato.telefone;
-      data.celular = this.contato.celular;
-      data.logradouro = this.endereco.logradouro;
-      data.numero = this.endereco.numero;
-      data.complemento = this.endereco.complemento;
-      data.bairro = this.endereco.bairro;
-      data.cep = this.endereco.cep;
-      data.dataCadastro = this.dataCadastro;
-      data.imagem = this.image;
-      this.endereco.localidade == ""
-        ? (data.cidade = null)
-        : (data.cidade = this.endereco.localidade);
+        data.nome = this.pessoa.nomeCompleto;
+        data.cpf = this.pessoa.cpf;
+        data.rg = this.pessoa.rg;
+        data.nascimento = this.pessoa.nascimento;
+        data.email = this.contato.email;
+        data.telefone = this.contato.telefone;
+        data.celular = this.contato.celular;
+        data.logradouro = this.endereco.logradouro;
+        data.numero = this.endereco.numero;
+        data.complemento = this.endereco.complemento;
+        data.bairro = this.endereco.bairro;
+        data.cep = this.endereco.cep;
+        data.dataCadastro = this.dataCadastro;
+        data.imagem = this.image;
+        this.endereco.localidade == ""
+          ? (data.cidade = null)
+          : (data.cidade = this.endereco.localidade);
 
-      this.$http
-        .get(
-          "https://vuejs-250c3.firebaseio.com/clientes.json?orderBy=%22id%22&limitToLast=1"
-        )
-        .then(response => {
-          if (response.body != null) {
-            const resultArray = [];
-            for (let key in response.body) {
-              resultArray.push(response.body[key]);
-            }
-            data.id = resultArray[0].id + 1;
-          } else {
-            data.id = 1;
-          }
-        })
-        .then(function() {
-          this.$http
-            .post("https://vuejs-250c3.firebaseio.com/clientes.json", data)
-            .then(
-              response => {
-                this.$refs.form.reset();
-                this.snackbar = true;
-                this.snackResponse = "Cadastro Realizado com Sucesso!";
-                console.log(response);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                }, 1750);
-              },
-              error => {
-                this.snackbar = true;
-                this.snackResponse = "Não foi possivel efetuar o cadastro";
-                console.log(error);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                }, 1750);
+        this.$http
+          .get(
+            "https://vuejs-250c3.firebaseio.com/clientes.json?orderBy=%22id%22&limitToLast=1"
+          )
+          .then(response => {
+            if (response.body != null) {
+              const resultArray = [];
+              for (let key in response.body) {
+                resultArray.push(response.body[key]);
               }
-            );
-        });
+              data.id = resultArray[0].id + 1;
+            } else {
+              data.id = 1;
+            }
+          })
+          .then(function() {
+            this.$http
+              .post("https://vuejs-250c3.firebaseio.com/clientes.json", data)
+              .then(
+                response => {
+                  this.$refs.form.reset();
+                  this.snackbar = true;
+                  this.snackResponse = "Cadastro Realizado com Sucesso!";
+                  console.log(response);
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.snackbar = false;
+                  }, 1750);
+                },
+                error => {
+                  this.snackbar = true;
+                  this.snackResponse = "Não foi possivel efetuar o cadastro";
+                  console.log(error);
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.snackbar = false;
+                  }, 1750);
+                }
+              );
+          });
+      } else {
+        this.alert = true;
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.alert = false;
+        }, 2000);
+      }
     },
     updating() {
-      this.loading = true;
+      if (this.$refs.form.validate()) {
+        this.loading = true;
 
-      var data = {};
+        var data = {};
 
-      data.nome = this.pessoa.nomeCompleto;
-      data.cpf = this.pessoa.cpf;
-      data.rg = this.pessoa.rg;
-      data.email = this.contato.email;
-      data.telefone = this.contato.telefone;
-      data.celular = this.contato.celular;
-      data.logradouro = this.endereco.logradouro;
-      data.numero = this.endereco.numero;
-      data.complemento = this.endereco.complemento;
-      data.bairro = this.endereco.bairro;
-      data.cep = this.endereco.cep;
-      data.id = this.idCliente;
-      data.cidade = this.endereco.localidade;
-      data.nascimento = this.pessoa.nascimento;
-      data.imagem = this.image;
+        data.nome = this.pessoa.nomeCompleto;
+        data.cpf = this.pessoa.cpf;
+        data.rg = this.pessoa.rg;
+        data.email = this.contato.email;
+        data.telefone = this.contato.telefone;
+        data.celular = this.contato.celular;
+        data.logradouro = this.endereco.logradouro;
+        data.numero = this.endereco.numero;
+        data.complemento = this.endereco.complemento;
+        data.bairro = this.endereco.bairro;
+        data.cep = this.endereco.cep;
+        data.id = this.idCliente;
+        data.cidade = this.endereco.localidade;
+        data.nascimento = this.pessoa.nascimento;
+        data.imagem = this.image;
 
-      this.$http
-        .get(
-          "https://vuejs-250c3.firebaseio.com/clientes.json?orderBy=%22id%22&equalTo=" +
-            this.idCliente
-        )
-        .then(response => {
-          this.chaveFirebase = Object.keys(response.body)[0];
-        })
-        .then(function() {
-          this.$http
-            .patch(
-              "https://vuejs-250c3.firebaseio.com/" +
-                this.chaveFirebase +
-                ".json",
-              data
-            )
-            .then(
-              response => {
-                this.snackbar = true;
-                this.snackResponse = "Cadastro Atualizado com Sucesso!";
-                console.log(response);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                  this.cancelar();
-                }, 1750);
-              },
-              error => {
-                this.snackbar = true;
-                this.snackResponse = "Não foi possivel atualizar o cadastro";
-                console.log(error);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                }, 1750);
-              }
-            );
-        });
+        this.$http
+          .get(
+            "https://vuejs-250c3.firebaseio.com/clientes.json?orderBy=%22id%22&equalTo=" +
+              this.idCliente
+          )
+          .then(response => {
+            this.chaveFirebase = Object.keys(response.body)[0];
+          })
+          .then(function() {
+            this.$http
+              .patch(
+                "https://vuejs-250c3.firebaseio.com/" +
+                  this.chaveFirebase +
+                  ".json",
+                data
+              )
+              .then(
+                response => {
+                  this.snackbar = true;
+                  this.snackResponse = "Cadastro Atualizado com Sucesso!";
+                  console.log(response);
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.snackbar = false;
+                    this.cancelar();
+                  }, 1750);
+                },
+                error => {
+                  this.snackbar = true;
+                  this.snackResponse = "Não foi possivel atualizar o cadastro";
+                  console.log(error);
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.snackbar = false;
+                  }, 1750);
+                }
+              );
+          });
+      } else {
+        this.alert = true;
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.alert = false;
+        }, 2000);
+      }
     },
     reset() {
       this.$refs.form.reset();
@@ -368,7 +386,7 @@ export default {
     pickFile() {
       this.$refs.image.click();
     },
-     onFilePicked(e) {
+    onFilePicked(e) {
       const files = e.target.files;
       if (files[0] !== undefined) {
         this.image.name = files[0].name;
@@ -386,7 +404,7 @@ export default {
         this.image.url = "";
         this.image.file = "";
       }
-    },
+    }
   },
   mounted() {
     console.log(this.$route.params);

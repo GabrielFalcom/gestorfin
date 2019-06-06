@@ -218,71 +218,80 @@ export default {
   }),
   methods: {
     submit() {
-      this.formatDate();
+      if (this.$refs.form.validate()) {
+        this.formatDate();
 
-      this.loading = true;
+        this.loading = true;
 
-      var data = {};
+        var data = {};
 
-      data.descricao = this.dados.descricao;
-      data.valor = this.dados.valor;
-      data.formaPagSelected = this.dados.formaPagSelected;
-      data.fornecedor = this.dados.fornecedor;
+        data.descricao = this.dados.descricao;
+        data.valor = this.dados.valor;
+        data.formaPagSelected = this.dados.formaPagSelected;
+        data.fornecedor = this.dados.fornecedor;
 
-      data.vencimento = this.date.vencimento;
-      data.compensacao = this.date.compensacao;
-      data.emissao = this.date.emissao;
+        data.vencimento = this.date.vencimento;
+        data.compensacao = this.date.compensacao;
+        data.emissao = this.date.emissao;
 
-      if (this.radiobtn == "Pago") {
-        data.status = this.radiobtn;
-      } else {
-        this.diffDays(this.date.vencimento);
-        data.status = this.radiobtn;
-      }
+        if (this.radiobtn == "Pago") {
+          data.status = this.radiobtn;
+        } else {
+          this.diffDays(this.date.vencimento);
+          data.status = this.radiobtn;
+        }
 
-      data.dataCadastro = this.dataCadastro;
+        data.dataCadastro = this.dataCadastro;
 
-      this.$http
-        .get(
-          "https://vuejs-250c3.firebaseio.com/pagamentos.json?orderBy=%22id%22&limitToLast=1"
-        )
-        .then(response => {
-          console.log(response);
-          if (response.body != null) {
-            const resultArray = [];
-            for (let key in response.body) {
-              resultArray.push(response.body[key]);
-            }
-            data.id = resultArray[0].id + 1;
-          } else {
-            data.id = 1;
-          }
-        })
-        .then(function() {
-          this.$http
-            .post("https://vuejs-250c3.firebaseio.com/pagamentos.json", data)
-            .then(
-              response => {
-                this.$refs.form.reset();
-                this.snackbar = true;
-                this.snackResponse = "Cadastro Realizado com Sucesso!";
-                console.log(response);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                }, 1750);
-              },
-              error => {
-                this.snackbar = true;
-                this.snackResponse = "Não foi possivel efetuar o cadastro";
-                console.log(error);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                }, 1750);
+        this.$http
+          .get(
+            "https://vuejs-250c3.firebaseio.com/pagamentos.json?orderBy=%22id%22&limitToLast=1"
+          )
+          .then(response => {
+            console.log(response);
+            if (response.body != null) {
+              const resultArray = [];
+              for (let key in response.body) {
+                resultArray.push(response.body[key]);
               }
-            );
-        });
+              data.id = resultArray[0].id + 1;
+            } else {
+              data.id = 1;
+            }
+          })
+          .then(function() {
+            this.$http
+              .post("https://vuejs-250c3.firebaseio.com/pagamentos.json", data)
+              .then(
+                response => {
+                  this.$refs.form.reset();
+                  this.snackbar = true;
+                  this.snackResponse = "Cadastro Realizado com Sucesso!";
+                  console.log(response);
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.snackbar = false;
+                  }, 1750);
+                },
+                error => {
+                  this.snackbar = true;
+                  this.snackResponse = "Não foi possivel efetuar o cadastro";
+                  console.log(error);
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.snackbar = false;
+                  }, 1750);
+                }
+              );
+          });
+      } else {
+        this.alert = true;
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.alert = false;
+        }, 2000);
+      }
     },
     diffDays(vencimento) {
       vencimento = vencimento.replace(/-/g, ",");
@@ -303,64 +312,73 @@ export default {
         : (this.radiobtn = "Em Aberto");
     },
     updating() {
-      this.loading = true;
+      if (this.$refs.form.validate()) {
+        this.loading = true;
 
-      var data = {};
+        var data = {};
 
-      data.descricao = this.dados.descricao;
-      data.valor = this.dados.valor;
-      data.formaPagSelected = this.dados.formaPagSelected;
-      data.fornecedor = this.dados.fornecedor;
+        data.descricao = this.dados.descricao;
+        data.valor = this.dados.valor;
+        data.formaPagSelected = this.dados.formaPagSelected;
+        data.fornecedor = this.dados.fornecedor;
 
-      data.vencimento = this.date.vencimento;
-      data.compensacao = this.date.compensacao;
-      data.emissao = this.date.emissao;
+        data.vencimento = this.date.vencimento;
+        data.compensacao = this.date.compensacao;
+        data.emissao = this.date.emissao;
 
-      if (this.radiobtn == "Pago") {
-        data.status = this.radiobtn;
+        if (this.radiobtn == "Pago") {
+          data.status = this.radiobtn;
+        } else {
+          this.diffDays(this.date.vencimento);
+          data.status = this.radiobtn;
+        }
+
+        this.$http
+          .get(
+            "https://vuejs-250c3.firebaseio.com/pagamentos.json?orderBy=%22id%22&equalTo=" +
+              this.idProduto
+          )
+          .then(response => {
+            this.chaveFirebase = Object.keys(response.body)[0];
+          })
+          .then(function() {
+            this.$http
+              .patch(
+                "https://vuejs-250c3.firebaseio.com/pagamentos/" +
+                  this.chaveFirebase +
+                  ".json",
+                data
+              )
+              .then(
+                response => {
+                  this.snackbar = true;
+                  this.snackResponse = "Cadastro Atualizado com Sucesso!";
+                  console.log(response);
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.snackbar = false;
+                    this.cancelar();
+                  }, 1750);
+                },
+                error => {
+                  this.snackbar = true;
+                  this.snackResponse = "Não foi possivel atualizar o cadastro";
+                  console.log(error);
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.snackbar = false;
+                  }, 1750);
+                }
+              );
+          });
       } else {
-        this.diffDays(this.date.vencimento);
-        data.status = this.radiobtn;
+        this.alert = true;
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.alert = false;
+        }, 2000);
       }
-
-      this.$http
-        .get(
-          "https://vuejs-250c3.firebaseio.com/pagamentos.json?orderBy=%22id%22&equalTo=" +
-            this.idProduto
-        )
-        .then(response => {
-          this.chaveFirebase = Object.keys(response.body)[0];
-        })
-        .then(function() {
-          this.$http
-            .patch(
-              "https://vuejs-250c3.firebaseio.com/pagamentos/" +
-                this.chaveFirebase +
-                ".json",
-              data
-            )
-            .then(
-              response => {
-                this.snackbar = true;
-                this.snackResponse = "Cadastro Atualizado com Sucesso!";
-                console.log(response);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                  this.cancelar();
-                }, 1750);
-              },
-              error => {
-                this.snackbar = true;
-                this.snackResponse = "Não foi possivel atualizar o cadastro";
-                console.log(error);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                }, 1750);
-              }
-            );
-        });
     },
     reset() {
       this.$refs.form.reset();

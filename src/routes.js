@@ -1,4 +1,5 @@
-import Home from './components/HelloWorld.vue'
+import HelloWorld from './components/HelloWorld.vue'
+import Home from './components/Home.vue'
 import Fornecedores from './components/fornecedor/Fornecedores.vue'
 import Fornecedor from './components/fornecedor/AddFornecedor.vue'
 import Clientes from './components/cliente/Clientes.vue'
@@ -16,9 +17,7 @@ import MarcaHora from './components/agenda/MarcaHora.vue'
 export const routes = [ 
     {
         path: '', 
-        components: {
-            default: Home,
-        },
+        component: Home,
         name: 'home'
     },
     {

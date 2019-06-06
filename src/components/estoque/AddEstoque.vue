@@ -23,7 +23,7 @@
                 </v-flex>
 
                 <v-flex d-flex xs6 sm6>
-                  <v-text-field v-model="quantidade" label="Quantidade" required></v-text-field>
+                  <v-text-field v-model="quantidade" label="Quantidade" required :rules="[v => !!v || 'Quantidade é obrigatorio']"></v-text-field>
                 </v-flex>
 
                 <v-flex d-flex xs6 sm6>
@@ -47,7 +47,7 @@
 
           <v-layout row wrap>
             <v-flex d-flex xs12 md3>
-              <v-text-field v-model="descricao" label="Descrição  Pagamento"></v-text-field>
+              <v-text-field v-model="descricao" label="Descrição  Pagamento" :rules="[v => !!v || 'Descrição é obrigatorio']"></v-text-field>
             </v-flex>
 
             <v-flex d-flex xs12 md3>
@@ -55,6 +55,7 @@
                 v-model="formaPagSelected"
                 :items="formaPag"
                 label="Forma de Pagamento"
+                :rules="[v => !!v || 'Forma de Pagamento é obrigatorio']">
                 required
               ></v-select>
             </v-flex>
@@ -79,6 +80,7 @@
                     prepend-icon="event"
                     v-on="on"
                     v-model="date.vencimento"
+                    :rules="[v => !!v || 'Data é obrigatorio']">
                   ></v-text-field>
                 </template>
                 <v-date-picker v-model="date.vencimento" no-title @input="menuVencimento = false"></v-date-picker>
@@ -97,6 +99,7 @@
                 full-width
                 max-width="290px"
                 min-width="290px"
+                :rules="[v => !!v || 'Data é obrigatorio']">
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
@@ -105,6 +108,7 @@
                     prepend-icon="event"
                     v-on="on"
                     v-model="date.emissao"
+                    :rules="[v => !!v || 'Data é obrigatorio']"
                   ></v-text-field>
                 </template>
                 <v-date-picker v-model="date.emissao" no-title @input="menuEmissao = false"></v-date-picker>
@@ -173,6 +177,8 @@ export default {
   }),
   methods: {
     submit() {
+      if (this.$refs.form.validate()) {
+
       this.formatDate();
 
       this.loading = true;
@@ -273,6 +279,14 @@ export default {
                 );
             });
         });
+         } else {
+        this.alert = true;
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.alert = false;
+        }, 2000);
+      }
     },
     reset() {
       this.$refs.form.reset();

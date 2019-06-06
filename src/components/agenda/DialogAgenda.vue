@@ -52,6 +52,14 @@
                 <v-list-tile-title>{{ content.total }}</v-list-tile-title>
                 <v-list-tile-sub-title>Receita do Jogo (R$)</v-list-tile-sub-title>
               </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile>
+              <v-list-tile-action></v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>{{ content.status }}</v-list-tile-title>
+                <v-list-tile-sub-title>Status</v-list-tile-sub-title>
+              </v-list-tile-content>
 
               <v-list-tile-action></v-list-tile-action>
 
@@ -59,24 +67,21 @@
                 <v-list-tile-title>{{ content.formaPagSelected }}</v-list-tile-title>
                 <v-list-tile-sub-title>Forma Pagamento</v-list-tile-sub-title>
               </v-list-tile-content>
-            </v-list-tile>
-
-            <v-list-tile>
-              <v-list-tile-action></v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title></v-list-tile-title>
-                <v-list-tile-sub-title>Status</v-list-tile-sub-title>
-              </v-list-tile-content>
-
-              <v-list-tile-action></v-list-tile-action>
-
-              <v-list-tile-content>
-                <v-list-tile-title></v-list-tile-title>
-                <v-list-tile-sub-title>Data Compensação</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>              
-
+            </v-list-tile> 
+            <v-divider inset></v-divider>             
           </v-list>
+
+          <v-list two-line>
+            <v-list-tile-sub-title>Clientes</v-list-tile-sub-title>
+              <v-list-tile v-for="(cliente,index) in content.clientes" :key="index" style="padding:0 53px">
+                <v-list-tile-content>
+                    <v-list-tile-title>{{ cliente }}</v-list-tile-title>
+                  </v-list-tile-content>
+              </v-list-tile>
+          </v-list>
+
+
+          
 
           <template v-if="erase == true">
             <v-divider></v-divider>

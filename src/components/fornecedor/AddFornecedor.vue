@@ -9,7 +9,7 @@
                 <v-card-title style="background-color:#00c853"></v-card-title>
                 <v-container>
                   <v-subheader>
-                    <v-icon style="padding-right: 5px">work</v-icon> Dados Empresariais 
+                    <v-icon style="padding-right: 5px">work</v-icon>Dados Empresariais
                   </v-subheader>
                   <v-layout>
                     <v-flex xs12 md3>
@@ -33,7 +33,12 @@
                       ></v-text-field>
                     </v-flex>
                     <v-flex xs12 md3>
-                      <v-text-field v-model="empresa.cnpj" mask="##.###.###/####-##" return-masked-value label="CNPJ"></v-text-field>
+                      <v-text-field
+                        v-model="empresa.cnpj"
+                        mask="##.###.###/####-##"
+                        return-masked-value
+                        label="CNPJ"
+                      ></v-text-field>
                     </v-flex>
                     <v-flex xs12 md6>
                       <v-text-field v-model="empresa.razaoSoc" label="Razão Social"></v-text-field>
@@ -50,7 +55,12 @@
                       ></v-text-field>
                     </v-flex>
                     <v-flex xs12 md3>
-                      <v-text-field v-model="pessoa.cpf" mask="###.###.###-##" return-masked-value label="CPF"></v-text-field>
+                      <v-text-field
+                        v-model="pessoa.cpf"
+                        mask="###.###.###-##"
+                        return-masked-value
+                        label="CPF"
+                      ></v-text-field>
                     </v-flex>
                     <v-flex xs12 md3>
                       <v-text-field v-model="pessoa.rg" label="RG"></v-text-field>
@@ -65,10 +75,20 @@
                       <v-text-field v-model="contato.email" :rules="emailRules" label="E-mail"></v-text-field>
                     </v-flex>
                     <v-flex xs12 md4>
-                      <v-text-field v-model="contato.telefone" mask="(##)####-####" return-masked-value label="Telefone"></v-text-field>
+                      <v-text-field
+                        v-model="contato.telefone"
+                        mask="(##)####-####"
+                        return-masked-value
+                        label="Telefone"
+                      ></v-text-field>
                     </v-flex>
                     <v-flex xs12 md4>
-                      <v-text-field v-model="contato.celular" mask="(##)#####-####" return-masked-value label="Celular"></v-text-field>
+                      <v-text-field
+                        v-model="contato.celular"
+                        mask="(##)#####-####"
+                        return-masked-value
+                        label="Celular"
+                      ></v-text-field>
                     </v-flex>
                   </v-layout>
                   <v-subheader>
@@ -123,6 +143,13 @@
           </template>
           <v-btn color="error" @click="cancelar" :disabled="loading">Cancelar</v-btn>
 
+          <v-alert
+            :value="alert"
+            icon="warning"
+            type="warning"
+            transition="scale-transition"
+          >Atenção aos campos obrigatorios</v-alert>
+
           <v-snackbar v-model="snackbar" :bottom="true" :timeout="1750">{{snackResponse}}</v-snackbar>
         </v-flex>
       </v-layout>
@@ -131,7 +158,7 @@
 </template>
 
 <script>
-import { eventBus } from '../../main';
+import { eventBus } from "../../main";
 
 export default {
   data: () => ({
@@ -143,6 +170,7 @@ export default {
     snackbar: false,
     snackResponse: "",
     valid: true,
+    alert: false,
     //Firebase não cria um auto increment integer para atribuir ao payload. Vou injetar o valor em submit.
     idFornecedor: "",
     //Firebase tambem não permite PUT utilizando a referencia do objeto, apenas com sua chave de acesso.
@@ -176,73 +204,85 @@ export default {
   }),
   methods: {
     submit() {
-      this.formatDate();
-      
-      this.loading = true;
-      var data = {};
-      data.tipoFornecedor = this.empresa.select;
-      this.empresa.select == "Pessoa Física"
-        ? (data.nome = this.pessoa.nomeCompleto)
-        : (data.nome = this.empresa.nomeFantasia);
-      data.cpf = this.pessoa.cpf;
-      data.rg = this.pessoa.rg;
-      data.cnpj = this.empresa.cnpj;
-      data.razaoSoc = this.empresa.azaoSoc;
-      data.email = this.contato.email;
-      data.telefone = this.contato.telefone;
-      data.celular = this.contato.celular;
-      data.logradouro = this.endereco.logradouro;
-      data.numero = this.endereco.numero;
-      data.complemento = this.endereco.complemento;
-      data.bairro = this.endereco.bairro;
-      data.cep = this.endereco.cep;
-      data.dataCadastro = this.dataCadastro;
-      this.endereco.localidade == ""
-        ? (data.cidade = null)
-        : (data.cidade = this.endereco.localidade);
-      
+      if (this.$refs.form.validate()) {
+        this.formatDate();
 
-      this.$http
-        .get(
-          "https://vuejs-250c3.firebaseio.com/fornecedores.json?orderBy=%22id%22&limitToLast=1"
-        )
-        .then(response => {
-          const resultArray = [];
-          for (let key in response.body) {
-            resultArray.push(response.body[key]);
-          }
-          data.id = resultArray[0].id + 1;
-        })
-        .then(function() {
-          this.$http
-            .post(
-              "https://vuejs-250c3.firebaseio.com/fornecedores.json",
-              data
-            )
-            .then(
-              response => {
-                this.$refs.form.reset();
-                this.snackbar = true;
-                this.snackResponse = "Cadastro Realizado com Sucesso!";
-                console.log(response);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                }, 1750);
-              },
-              error => {
-                this.snackbar = true;
-                this.snackResponse = "Não foi possivel efetuar o cadastro";
-                console.log(error);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                }, 1750);
-              }
-            );
-        });
+        this.loading = true;
+        var data = {};
+        data.tipoFornecedor = this.empresa.select;
+        this.empresa.select == "Pessoa Física"
+          ? (data.nome = this.pessoa.nomeCompleto)
+          : (data.nome = this.empresa.nomeFantasia);
+        data.cpf = this.pessoa.cpf;
+        data.rg = this.pessoa.rg;
+        data.cnpj = this.empresa.cnpj;
+        data.razaoSoc = this.empresa.azaoSoc;
+        data.email = this.contato.email;
+        data.telefone = this.contato.telefone;
+        data.celular = this.contato.celular;
+        data.logradouro = this.endereco.logradouro;
+        data.numero = this.endereco.numero;
+        data.complemento = this.endereco.complemento;
+        data.bairro = this.endereco.bairro;
+        data.cep = this.endereco.cep;
+        data.dataCadastro = this.dataCadastro;
+        this.endereco.localidade == ""
+          ? (data.cidade = null)
+          : (data.cidade = this.endereco.localidade);
+
+        this.$http
+          .get(
+            "https://vuejs-250c3.firebaseio.com/fornecedores.json?orderBy=%22id%22&limitToLast=1"
+          )
+          .then(response => {
+            const resultArray = [];
+            for (let key in response.body) {
+              resultArray.push(response.body[key]);
+            }
+            data.id = resultArray[0].id + 1;
+          })
+          .then(function() {
+            this.$http
+              .post(
+                "https://vuejs-250c3.firebaseio.com/fornecedores.json",
+                data
+              )
+              .then(
+                response => {
+                  this.$refs.form.reset();
+                  this.snackbar = true;
+                  this.snackResponse = "Cadastro Realizado com Sucesso!";
+                  console.log(response);
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.snackbar = false;
+                  }, 1750);
+                },
+                error => {
+                  this.snackbar = true;
+                  this.snackResponse = "Não foi possivel efetuar o cadastro";
+                  console.log(error);
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.snackbar = false;
+                  }, 1750);
+                }
+              );
+          });
+      } else {
+        this.alert = true;
+        this.loading = true;
+        setTimeout(() => {
+                this.loading = false;
+                this.alert = false;
+                }, 2000);
+      }
+
     },
     updating() {
+      if (this.$refs.form.validate()) {
+        this.formatDate();
+
       this.loading = true;
 
       var data = {};
@@ -267,15 +307,18 @@ export default {
 
       this.$http
         .get(
-          "https://vuejs-250c3.firebaseio.com/fornecedores.json?orderBy=%22id%22&equalTo="+this.idFornecedor
+          "https://vuejs-250c3.firebaseio.com/fornecedores.json?orderBy=%22id%22&equalTo=" +
+            this.idFornecedor
         )
         .then(response => {
-          this.chaveFirebase=(Object.keys(response.body)[0]);
+          this.chaveFirebase = Object.keys(response.body)[0];
         })
         .then(function() {
           this.$http
             .patch(
-              "https://vuejs-250c3.firebaseio.com/fornecedores/"+this.chaveFirebase+'.json',
+              "https://vuejs-250c3.firebaseio.com/fornecedores/" +
+                this.chaveFirebase +
+                ".json",
               data
             )
             .then(
@@ -300,6 +343,14 @@ export default {
               }
             );
         });
+    } else {
+        this.alert = true;
+        this.loading = true;
+        setTimeout(() => {
+                this.loading = false;
+                this.alert = false;
+                }, 2000);
+      }
     },
     reset() {
       this.$refs.form.reset();
@@ -322,11 +373,11 @@ export default {
           });
       }
     },
-    formatDate(){
+    formatDate() {
       var todayTime = new Date();
-      var month = (todayTime .getMonth() + 1);
-      var day = (todayTime .getDate());
-      var year = (todayTime .getFullYear());
+      var month = todayTime.getMonth() + 1;
+      var day = todayTime.getDate();
+      var year = todayTime.getFullYear();
       this.dataCadastro = day + "/" + month + "/" + year;
     },
     cancelar() {

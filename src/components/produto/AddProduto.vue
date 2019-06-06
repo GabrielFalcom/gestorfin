@@ -9,7 +9,7 @@
                 <v-tabs centered color="amber darken-2" dark icons-and-text height="40">
                   <v-tabs-slider color="green dark-4"></v-tabs-slider>
 
-                  <v-tab href="#tab-1" >
+                  <v-tab href="#tab-1">
                     Dados
                     <v-icon style="padding:0; margin:0;">list</v-icon>
                   </v-tab>
@@ -47,10 +47,20 @@
                             <v-text-field v-model="dados.quantidade" label="Quantidade" required></v-text-field>
                           </v-flex>
                           <v-flex xs12 md2>
-                            <v-text-field v-model="dados.precoCompra" prefix="R$" label="Preco de Compra" required></v-text-field>
+                            <v-text-field
+                              v-model="dados.precoCompra"
+                              prefix="R$"
+                              label="Preco de Compra"
+                              required
+                            ></v-text-field>
                           </v-flex>
                           <v-flex xs12 md2>
-                            <v-text-field v-model="dados.precoConsumo" prefix="R$" label="Preco de Consumo" required></v-text-field>
+                            <v-text-field
+                              v-model="dados.precoConsumo"
+                              prefix="R$"
+                              label="Preco de Consumo"
+                              required
+                            ></v-text-field>
                           </v-flex>
                         </template>
                       </v-layout>
@@ -201,129 +211,147 @@ export default {
   }),
   methods: {
     submit() {
-      this.formatDate();
+      if (this.$refs.form.validate()) {
+        this.formatDate();
 
-      this.loading = true;
+        this.loading = true;
 
-      var data = {};
+        var data = {};
 
-      data.nome = this.dados.nome;
-      data.fornecedor = this.dados.fornecedor;
-      data.quantidade = this.dados.quantidade;
-      data.precoCompra = this.dados.precoCompra;
-      data.precoConsumo = this.dados.precoConsumo;
+        data.nome = this.dados.nome;
+        data.fornecedor = this.dados.fornecedor;
+        data.quantidade = this.dados.quantidade;
+        data.precoCompra = this.dados.precoCompra;
+        data.precoConsumo = this.dados.precoConsumo;
 
-      data.peso = this.dimensao.peso;
-      data.altura = this.dimensao.altura;
-      data.largura = this.dimensao.largura;
-      data.comprimento = this.dimensao.comprimento;
+        data.peso = this.dimensao.peso;
+        data.altura = this.dimensao.altura;
+        data.largura = this.dimensao.largura;
+        data.comprimento = this.dimensao.comprimento;
 
-      data.descricao = this.descricao;
+        data.descricao = this.descricao;
 
-      data.dataCadastro = this.dataCadastro;
+        data.dataCadastro = this.dataCadastro;
 
-      data.imagem = this.image;
+        data.imagem = this.image;
 
-      this.$http
-        .get(
-          "https://vuejs-250c3.firebaseio.com/produtos.json?orderBy=%22id%22&limitToLast=1"
-        )
-        .then(response => {
-          console.log(response);
-          if (response.body != null) {
-            const resultArray = [];
-            for (let key in response.body) {
-              resultArray.push(response.body[key]);
-            }
-            data.id = resultArray[0].id + 1;
-          } else {
-            data.id = 1;
-          }
-        })
-        .then(function() {
-          this.$http
-            .post("https://vuejs-250c3.firebaseio.com/produtos.json", data)
-            .then(
-              response => {
-                this.$refs.form.reset();
-                this.snackbar = true;
-                this.snackResponse = "Cadastro Realizado com Sucesso!";
-                console.log(response);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                }, 1750);
-              },
-              error => {
-                this.snackbar = true;
-                this.snackResponse = "Não foi possivel efetuar o cadastro";
-                console.log(error);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                }, 1750);
+        this.$http
+          .get(
+            "https://vuejs-250c3.firebaseio.com/produtos.json?orderBy=%22id%22&limitToLast=1"
+          )
+          .then(response => {
+            console.log(response);
+            if (response.body != null) {
+              const resultArray = [];
+              for (let key in response.body) {
+                resultArray.push(response.body[key]);
               }
-            );
-        });
+              data.id = resultArray[0].id + 1;
+            } else {
+              data.id = 1;
+            }
+          })
+          .then(function() {
+            this.$http
+              .post("https://vuejs-250c3.firebaseio.com/produtos.json", data)
+              .then(
+                response => {
+                  this.$refs.form.reset();
+                  this.snackbar = true;
+                  this.snackResponse = "Cadastro Realizado com Sucesso!";
+                  console.log(response);
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.snackbar = false;
+                  }, 1750);
+                },
+                error => {
+                  this.snackbar = true;
+                  this.snackResponse = "Não foi possivel efetuar o cadastro";
+                  console.log(error);
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.snackbar = false;
+                  }, 1750);
+                }
+              );
+          });
+      } else {
+        this.alert = true;
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.alert = false;
+        }, 2000);
+      }
     },
     updating() {
-      this.loading = true;
+      if (this.$refs.form.validate()) {
+        this.loading = true;
 
-      var data = {};
+        var data = {};
 
-      data.nome = this.dados.nome;
-      data.fornecedor = this.dados.fornecedor;
-      data.quantidade = this.dados.quantidade;
-      data.precoCompra = this.dados.precoCompra;
-      data.precoConsumo = this.dados.precoConsumo;
+        data.nome = this.dados.nome;
+        data.fornecedor = this.dados.fornecedor;
+        data.quantidade = this.dados.quantidade;
+        data.precoCompra = this.dados.precoCompra;
+        data.precoConsumo = this.dados.precoConsumo;
 
-      data.peso = this.dimensao.peso;
-      data.altura = this.dimensao.peso;
-      data.largura = this.dimensao.largura;
-      data.comprimento = this.dimensao.comprimento;
+        data.peso = this.dimensao.peso;
+        data.altura = this.dimensao.peso;
+        data.largura = this.dimensao.largura;
+        data.comprimento = this.dimensao.comprimento;
 
-      data.descricao = this.descricao;
+        data.descricao = this.descricao;
 
-      data.imagem = this.image;
+        data.imagem = this.image;
 
-      this.$http
-        .get(
-          "https://vuejs-250c3.firebaseio.com/produtos.json?orderBy=%22id%22&equalTo=" +
-            this.idProduto
-        )
-        .then(response => {
-          this.chaveFirebase = Object.keys(response.body)[0];
-        })
-        .then(function() {
-          this.$http
-            .patch(
-              "https://vuejs-250c3.firebaseio.com/produtos/" +
-                this.chaveFirebase +
-                ".json",
-              data
-            )
-            .then(
-              response => {
-                this.snackbar = true;
-                this.snackResponse = "Cadastro Atualizado com Sucesso!";
-                console.log(response);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                  this.cancelar();
-                }, 1750);
-              },
-              error => {
-                this.snackbar = true;
-                this.snackResponse = "Não foi possivel atualizar o cadastro";
-                console.log(error);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.snackbar = false;
-                }, 1750);
-              }
-            );
-        });
+        this.$http
+          .get(
+            "https://vuejs-250c3.firebaseio.com/produtos.json?orderBy=%22id%22&equalTo=" +
+              this.idProduto
+          )
+          .then(response => {
+            this.chaveFirebase = Object.keys(response.body)[0];
+          })
+          .then(function() {
+            this.$http
+              .patch(
+                "https://vuejs-250c3.firebaseio.com/produtos/" +
+                  this.chaveFirebase +
+                  ".json",
+                data
+              )
+              .then(
+                response => {
+                  this.snackbar = true;
+                  this.snackResponse = "Cadastro Atualizado com Sucesso!";
+                  console.log(response);
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.snackbar = false;
+                    this.cancelar();
+                  }, 1750);
+                },
+                error => {
+                  this.snackbar = true;
+                  this.snackResponse = "Não foi possivel atualizar o cadastro";
+                  console.log(error);
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.snackbar = false;
+                  }, 1750);
+                }
+              );
+          });
+      } else {
+        this.alert = true;
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.alert = false;
+        }, 2000);
+      }
     },
     reset() {
       this.$refs.form.reset();
